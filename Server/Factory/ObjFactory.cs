@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using Server.Model;
+using Server.StockServices;
+using System.Reflection;
 using Unity;
 
 namespace Server.Factory
@@ -41,10 +43,39 @@ namespace Server.Factory
 
         #endregion Constructor
 
-        #region Socket Service
+        #region Data
 
-        
+        public StockData CreateStockData()
+        {
+            if (!_objContainer.IsRegistered(typeof(StockData), MethodBase.GetCurrentMethod().Name))
+            {
+                _objContainer.RegisterInstance(typeof(StockData), MethodBase.GetCurrentMethod().Name);
+            }
+            return (StockData)_objContainer.Resolve(typeof(StockData), MethodBase.GetCurrentMethod().Name);
+        }
 
-        #endregion Socket Service
+        #endregion Data
+
+        #region Services
+
+        public IRegisterClients CreateRegisterClients()
+        {
+            if (!_objContainer.IsRegistered(typeof(RegisterClients), MethodBase.GetCurrentMethod().Name))
+            {
+                _objContainer.RegisterSingleton(typeof(RegisterClients), MethodBase.GetCurrentMethod().Name);
+            }
+            return (RegisterClients)_objContainer.Resolve(typeof(RegisterClients), MethodBase.GetCurrentMethod().Name);
+        }
+
+        public IBroadCastData CreateBroadCastData()
+        {
+            if (!_objContainer.IsRegistered(typeof(BroadCastData), MethodBase.GetCurrentMethod().Name))
+            {
+                _objContainer.RegisterSingleton(typeof(BroadCastData), MethodBase.GetCurrentMethod().Name);
+            }
+            return (BroadCastData)_objContainer.Resolve(typeof(BroadCastData), MethodBase.GetCurrentMethod().Name);
+        }
+
+        #endregion Services
     }
 }
