@@ -5,7 +5,7 @@ using System.Windows;
 
 namespace Client
 {
-    public partial class MainWindow : Window
+    public partial class TradeWindow : Window
     {
         StockService.StockServiceClient _client;
         private delegate void HandleBroadcastCallback(object sender, EventArgs e);
@@ -43,7 +43,7 @@ namespace Client
             this._client.RegisterClient("Ankur");
         }
 
-        public MainWindow()
+        public TradeWindow()
         {
             InitializeComponent();
             RegisterClient();

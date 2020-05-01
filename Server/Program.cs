@@ -1,4 +1,5 @@
-﻿using Server.StockServices;
+﻿using Server.Factory;
+using Server.StockServices;
 using System;
 using System.ServiceModel;
 using System.Threading.Tasks;
@@ -17,11 +18,21 @@ namespace Server
 
         private static void HostStockService()
         {
-            using (ServiceHost host = new ServiceHost(typeof(StockService)))
+            try
             {
-                host.Open();
-                Console.WriteLine("Host started @ " + DateTime.Now.ToString());
-                Console.ReadLine();
+                using (ServiceHost host = new ServiceHost(typeof(StockService)))
+                {
+                    host.Open();
+                    Console.WriteLine("Host started @ " + DateTime.Now.ToString());
+                    ObjFactory.Instance.CreateLogger()
+                        .Log("Host started", "Program", false);
+                    Console.ReadLine();
+                }
+            }
+            catch(Exception ex)
+            {
+                ObjFactory.Instance.CreateLogger()
+                    .Log("HostStockService EX = " + ex.Message, "Program");
             }
         }
     }

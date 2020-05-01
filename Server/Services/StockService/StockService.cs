@@ -18,6 +18,7 @@ namespace Server.StockServices
 
         public StockService()
         {
+            _locker = new object();
             StartBroadCastingPrice();
         }
 
@@ -27,6 +28,8 @@ namespace Server.StockServices
 
         public void RegisterClient(string clientId)
         {
+            ObjFactory.Instance.CreateLogger()
+                    .Log("Start Registered ClientId =" + clientId, this.GetType().Name, false);
             lock (_locker)
             {
                 ObjFactory.Instance.CreateRegisterClients().RegisterClient(clientId);
@@ -41,13 +44,15 @@ namespace Server.StockServices
         {
             var eventDataType = ObjFactory.Instance.CreateStockData();
             eventDataType.StockPrice = new Random().Next(100, 120);
+            ObjFactory.Instance.CreateLogger()
+                    .Log("BroadCast Price = " + eventDataType.StockPrice, this.GetType().Name, false);
             lock (_locker)
             {
                 ObjFactory.Instance.CreateBroadCastData()
                     .BroadCastStockPrice(eventDataType,
                     ObjFactory.Instance.CreateRegisterClients().GetClients());
             }
-
+            
             await Task.Delay(500);
             StartBroadCastingPrice();
         }

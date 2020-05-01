@@ -1,5 +1,6 @@
 ﻿using Server.Model;
 using Server.StockServices;
+using Services.Logging;
 using System.Reflection;
 using Unity;
 
@@ -42,6 +43,19 @@ namespace Server.Factory
         }
 
         #endregion Constructor
+
+        #region Logs
+
+        internal ILog CreateLogger()
+        {
+            if (!_objContainer.IsRegistered(typeof(Logger), MethodBase.GetCurrentMethod().Name))
+            {
+                _objContainer.RegisterSingleton(typeof(Logger), MethodBase.GetCurrentMethod().Name);
+            }
+            return (Logger)_objContainer.Resolve(typeof(Logger), MethodBase.GetCurrentMethod().Name);
+        }
+
+        #endregion Logs
 
         #region Data
 

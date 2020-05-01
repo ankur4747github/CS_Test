@@ -17,10 +17,14 @@ namespace Server.StockServices
                 try
                 {
                     client.Value.BroadcastToClient(data);
+                    ObjFactory.Instance.CreateLogger()
+                        .Log("After BroadCast to clientId = " + client, this.GetType().Name, false);
                 }
                 catch
                 {
                     inactiveClients.Add(client.Key);
+                    ObjFactory.Instance.CreateLogger()
+                        .Log("Error in BroadCast Added in inactiveList ClientId =" + client, this.GetType().Name, false);
                 }
             }
             RemoveInactiveClients(inactiveClients);

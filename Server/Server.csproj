@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MetroLog, Version=1.0.1.0, Culture=neutral, PublicKeyToken=ba4ace74c3b410f3, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroLog.1.0.1\lib\net45\MetroLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -56,12 +59,14 @@
   <ItemGroup>
     <Compile Include="Constants\Constant.cs" />
     <Compile Include="Factory\ObjFactory.cs" />
-    <Compile Include="StockServices\BroadCastData.cs" />
-    <Compile Include="StockServices\IBroadCastData.cs" />
-    <Compile Include="StockServices\IRegisterClients.cs" />
-    <Compile Include="StockServices\IStockService.cs" />
-    <Compile Include="StockServices\RegisterClients.cs" />
-    <Compile Include="StockServices\StockService.cs" />
+    <Compile Include="Services\Logging\ILog.cs" />
+    <Compile Include="Services\Logging\Logger.cs" />
+    <Compile Include="Services\StockService\BroadCastData.cs" />
+    <Compile Include="Services\StockService\IBroadCastData.cs" />
+    <Compile Include="Services\StockService\IRegisterClients.cs" />
+    <Compile Include="Services\StockService\IStockService.cs" />
+    <Compile Include="Services\StockService\RegisterClients.cs" />
+    <Compile Include="Services\StockService\StockService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\StockData.cs" />
