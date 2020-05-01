@@ -2,7 +2,7 @@
 using System.Reflection;
 using Unity;
 
-namespace Server.Factory
+namespace Client.Factory
 {
     public sealed class ObjFactory
     {

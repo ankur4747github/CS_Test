@@ -1,41 +1,45 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Threading;
+using Client.Factory;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Resources;
+using System.Reflection;
 
 namespace Client.ViewModel
 {
     public abstract class BaseViewModel : ViewModelBase, INotifyPropertyChanged
     {
+        #region Fields
+        public ResourceManager resourceManager { get; set; }
+        #endregion
+
+        #region Constructor
+        public BaseViewModel()
+        {
+            resourceManager = new ResourceManager("Client.Properties.Resources", 
+                Assembly.GetExecutingAssembly());
+        }
+        #endregion
+
         #region PropertyChanged
 
         public new event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChangedAsync([CallerMemberName]string propertyName = null)
         {
-            try
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
-                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                try
                 {
-                    try
-                    {
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-                    }
-                    catch (Exception ex)
-                    {
-                        //ObjFactory.Instance.CreateLogger().Log("OnPropertyChangedAsync 1= " + ex.Message, GetType().Name);
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                //ObjFactory.Instance.CreateLogger().Log("OnPropertyChangedAsync 2= " + ex.Message, GetType().Name);
-            }
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                }
+                catch (Exception ex)
+                {
+                    ObjFactory.Instance.CreateLogger().Log("OnPropertyChangedAsync = " + ex.Message, GetType().Name);
+                }
+            });
         }
 
         #endregion PropertyChanged

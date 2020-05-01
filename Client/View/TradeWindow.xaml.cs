@@ -1,13 +1,25 @@
-﻿using System;
+﻿using Client.ViewModel;
+using GalaSoft.MvvmLight.Threading;
+using System;
 using System.ComponentModel;
-using System.ServiceModel;
 using System.Windows;
 
 namespace Client
 {
     public partial class TradeWindow : Window
     {
-        StockService.StockServiceClient _client;
+        public TradeWindowViewModel ViewModel { get; set; }
+
+        public TradeWindow()
+        {
+            InitializeComponent();
+            DispatcherHelper.Initialize();
+            ViewModel = new TradeWindowViewModel();
+            this.DataContext = ViewModel;
+        }
+
+        private StockService.StockServiceClient _client;
+
         private delegate void HandleBroadcastCallback(object sender, EventArgs e);
 
         public void HandleBroadcast(object sender, EventArgs e)
@@ -15,9 +27,9 @@ namespace Client
             try
             {
                 var eventData = (StockService.StockData)sender;
-                this.Dispatcher.BeginInvoke(new Action(() => {
-                    txtStockPrice.Text = eventData.StockPrice.ToString();
-                }));
+                //this.Dispatcher.BeginInvoke(new Action(() => {
+                //    txtStockPrice.Text = eventData.StockPrice.ToString();
+                //}));
             }
             catch (Exception ex)
             {
@@ -42,12 +54,6 @@ namespace Client
 
             this._client.RegisterClient("Ankur");
         }
-
-        public TradeWindow()
-        {
-            InitializeComponent();
-            RegisterClient();
-        }
     }
 
     public class BroadcastorCallback : StockService.IStockServiceCallback
@@ -56,6 +62,7 @@ namespace Client
             AsyncOperationManager.SynchronizationContext;
 
         private EventHandler _broadcastorCallBackHandler;
+
         public void SetHandler(EventHandler handler)
         {
             this._broadcastorCallBackHandler = handler;

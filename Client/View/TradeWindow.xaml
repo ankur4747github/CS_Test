@@ -3,13 +3,33 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converter="clr-namespace:Client.Converters"
         xmlns:local="clr-namespace:Client"
+        xmlns:p="clr-namespace:Client.Properties"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="TradeWindow" Height="450" Width="800">
+    <Window.Resources>
+        <converter:BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <converter:InverseBooleanToVisibilityConverter x:Key="InverseBoolToVis" />
+    </Window.Resources>
     <Grid>
-        <TextBlock x:Name="txtStockPrice"
-                   Width="150"
-                   Height="40">
-        </TextBlock>
+        <StackPanel VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Visibility="{Binding IsTradeUIVisible, Mode=OneWay,Converter={StaticResource InverseBoolToVis}}">
+            <TextBlock Text="{x:Static p:Resources.EnterClientID_Text}">
+            </TextBlock >
+            <TextBox Margin="0, 10"
+                     Text="{Binding ClientId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            </TextBox>
+            <Button Content="{x:Static p:Resources.Ok_Content}"
+                    Command="{Binding StartCommand}">
+            </Button>
+        </StackPanel>
+        <Grid Visibility="{Binding IsTradeUIVisible, Mode=OneWay,Converter={StaticResource BoolToVis}}"
+              MinHeight="300"
+              MinWidth="500"
+              Background="LightGray">
+
+        </Grid>
     </Grid>
 </Window>
