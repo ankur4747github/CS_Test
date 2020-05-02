@@ -1,4 +1,5 @@
 ﻿using Server.Factory;
+using Server.Model;
 using System;
 using System.ServiceModel;
 using System.Threading.Tasks;
@@ -36,6 +37,12 @@ namespace Server.StockServices
             }
         }
 
+        public void PlaceOrder(PlaceOrderData data)
+        {
+             
+        }
+
+
         #endregion Public Methods
 
         #region Private Methods
@@ -56,6 +63,8 @@ namespace Server.StockServices
             await Task.Delay(500);
             StartBroadCastingPrice();
         }
+
+      
 
         #endregion Private Methods
     }

@@ -9,6 +9,8 @@ namespace Client.Services.Stock
 
         private StockService.StockServiceClient _client { get; set; }
 
+       
+
         #endregion Fields
 
         #region Public Methods
@@ -38,6 +40,14 @@ namespace Client.Services.Stock
                     .Log("Register = " + ex.Message, GetType().Name);
             }
             return false;
+        }
+
+        public void PlaceOrder(StockService.PlaceOrderData data)
+        {
+            if (_client != null)
+            {
+                _client.PlaceOrder(data);
+            }
         }
 
         #endregion Public Methods

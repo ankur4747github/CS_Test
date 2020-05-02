@@ -1,8 +1,7 @@
-﻿using Services.Logging;
+﻿using Client.Services.Stock;
+using Services.Logging;
 using System.Reflection;
-using Client.Services;
 using Unity;
-using Client.Services.Stock;
 
 namespace Client.Factory
 {
@@ -58,6 +57,7 @@ namespace Client.Factory
         #endregion Logs
 
         #region Services
+
         public IRegisterClient CreateRegisterClients()
         {
             if (!_objContainer.IsRegistered(typeof(RegisterClient), MethodBase.GetCurrentMethod().Name))
@@ -75,6 +75,20 @@ namespace Client.Factory
             }
             return (BroadcastorCallback)_objContainer.Resolve(typeof(BroadcastorCallback), MethodBase.GetCurrentMethod().Name);
         }
-        #endregion
+
+        #endregion Services
+
+        #region Data
+
+        public StockService.PlaceOrderData CreateStockServicePlaceOrderData()
+        {
+            if (!_objContainer.IsRegistered(typeof(StockService.PlaceOrderData), MethodBase.GetCurrentMethod().Name))
+            {
+                _objContainer.RegisterSingleton(typeof(StockService.PlaceOrderData), MethodBase.GetCurrentMethod().Name);
+            }
+            return (StockService.PlaceOrderData)_objContainer.Resolve(typeof(StockService.PlaceOrderData), MethodBase.GetCurrentMethod().Name);
+        }
+
+        #endregion Data
     }
 }

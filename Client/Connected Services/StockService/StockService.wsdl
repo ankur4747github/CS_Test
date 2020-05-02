@@ -39,12 +39,22 @@
   <wsdl:message name="IStockService_RegisterClient_InputMessage">
     <wsdl:part name="parameters" element="tns:RegisterClient" />
   </wsdl:message>
+  <wsdl:message name="IStockService_PlaceOrder_InputMessage">
+    <wsdl:part name="parameters" element="tns:PlaceOrder" />
+  </wsdl:message>
+  <wsdl:message name="IStockService_PlaceOrder_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PlaceOrderResponse" />
+  </wsdl:message>
   <wsdl:message name="IStockService_BroadcastPriceToClient_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:BroadcastPriceToClient" />
   </wsdl:message>
   <wsdl:portType name="IStockService">
     <wsdl:operation name="RegisterClient">
       <wsdl:input wsaw:Action="http://tempuri.org/IStockService/RegisterClient" message="tns:IStockService_RegisterClient_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PlaceOrder">
+      <wsdl:input wsaw:Action="http://tempuri.org/IStockService/PlaceOrder" message="tns:IStockService_PlaceOrder_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IStockService/PlaceOrderResponse" message="tns:IStockService_PlaceOrder_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="BroadcastPriceToClient">
       <wsdl:output wsaw:Action="http://tempuri.org/IStockService/BroadcastPriceToClient" message="tns:IStockService_BroadcastPriceToClient_OutputCallbackMessage" />
@@ -58,6 +68,15 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="PlaceOrder">
+      <soap12:operation soapAction="http://tempuri.org/IStockService/PlaceOrder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="BroadcastPriceToClient">
       <soap12:operation soapAction="http://tempuri.org/IStockService/BroadcastPriceToClient" style="document" />

@@ -209,8 +209,6 @@ namespace Client.ViewModel
             SellCommand = new RelayCommand(new Action<object>(SellCommandClick));
         }
 
-        
-
         #endregion InitCommand
 
         #region Private Methods
@@ -247,17 +245,21 @@ namespace Client.ViewModel
         {
             if (IsValidPriceAndQuantity())
             {
-
+                ObjFactory.Instance.CreateLogger().Log(string.Format("Start Sell Price {0} Quantity {1}",
+                    BuySellPrice, Quantity), GetType().Name, false);
+                var data = GetOrderData(false);
+                ObjFactory.Instance.CreateRegisterClients().PlaceOrder(data);
             }
         }
-
-       
 
         private void BuyCommandClick(object obj)
         {
             if (IsValidPriceAndQuantity())
             {
-
+                ObjFactory.Instance.CreateLogger().Log(string.Format("Start Buy Price {0} Quantity {1}",
+                    BuySellPrice, Quantity), GetType().Name, false);
+                var data = GetOrderData(true);
+                ObjFactory.Instance.CreateRegisterClients().PlaceOrder(data);
             }
         }
 
@@ -296,9 +298,10 @@ namespace Client.ViewModel
         #endregion Update Data
 
         #region Validation
+
         private bool IsValidPriceAndQuantity()
         {
-            if(BuySellPrice > 0 && Quantity > 0)
+            if (BuySellPrice > 0 && Quantity > 0)
             {
                 return true;
             }
@@ -308,7 +311,18 @@ namespace Client.ViewModel
             }
             return false;
         }
-        #endregion
+
+        #endregion Validation
+
+        private PlaceOrderData GetOrderData(bool isBuy)
+        {
+            var data = ObjFactory.Instance.CreateStockServicePlaceOrderData();
+            data.Price = BuySellPrice;
+            data.IsBuy = isBuy;
+            data.IsSell = !isBuy;
+            data.Quantity = Quantity;
+            return data;
+        }
 
         #endregion Private Methods
     }

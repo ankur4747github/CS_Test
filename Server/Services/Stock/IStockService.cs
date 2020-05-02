@@ -1,5 +1,6 @@
 ﻿using Server.Model;
 using System.ServiceModel;
+using System.ServiceModel.Web;
 
 namespace Server.StockServices
 {
@@ -8,6 +9,13 @@ namespace Server.StockServices
     {
         [OperationContract(IsOneWay = true)]
         void RegisterClient(string clientId);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+            UriTemplate = "json/{id}")]
+        void PlaceOrder(PlaceOrderData data);
     }
 
     public interface IBroadcastorCallBack

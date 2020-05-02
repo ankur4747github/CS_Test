@@ -12,5 +12,7 @@ namespace Server.StockServices
         void UnRegisterClient(List<string> inactiveClients);
         IReadOnlyDictionary<string, IBroadcastorCallBack> GetClients();
 
+
+
     }
 }

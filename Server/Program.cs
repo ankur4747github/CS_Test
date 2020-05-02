@@ -16,6 +16,8 @@ namespace Server
             Console.ReadLine();
         }
 
+        
+
         private static void HostStockService()
         {
             try
@@ -29,7 +31,7 @@ namespace Server
                     Console.ReadLine();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ObjFactory.Instance.CreateLogger()
                     .Log("HostStockService EX = " + ex.Message, "Program");

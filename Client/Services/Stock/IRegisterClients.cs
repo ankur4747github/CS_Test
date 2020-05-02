@@ -9,5 +9,7 @@ namespace Client.Services.Stock
     public interface IRegisterClient
     {
         bool Register(string clientId);
+
+        void PlaceOrder(StockService.PlaceOrderData data);
     }
 }

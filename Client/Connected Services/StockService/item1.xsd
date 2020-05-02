@@ -8,10 +8,22 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="PlaceOrder">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Server.Model" minOccurs="0" name="data" nillable="true" type="q1:PlaceOrderData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PlaceOrderResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="BroadcastPriceToClient">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Server.Model" minOccurs="0" name="eventData" nillable="true" type="q1:StockData" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Server.Model" minOccurs="0" name="eventData" nillable="true" type="q2:StockData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
