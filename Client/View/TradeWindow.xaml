@@ -17,7 +17,7 @@
                     HorizontalAlignment="Center"
                     Visibility="{Binding IsTradeUIVisible, Mode=OneWay,Converter={StaticResource InverseBoolToVis}}">
             <TextBlock Text="{x:Static p:Resources.EnterClientID_Text}">
-            </TextBlock >
+            </TextBlock>
             <TextBox Margin="0, 10"
                      Text="{Binding ClientId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             </TextBox>
@@ -25,11 +25,43 @@
                     Command="{Binding StartCommand}">
             </Button>
         </StackPanel>
+
         <Grid Visibility="{Binding IsTradeUIVisible, Mode=OneWay,Converter={StaticResource BoolToVis}}"
               MinHeight="300"
               MinWidth="500"
               Background="LightGray">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal"
+                        Background="Yellow"
+                        VerticalAlignment="Center">
+                <TextBlock Text="{x:Static p:Resources.StockPrice}"
+                           FontSize="20">
+                </TextBlock>
+                <TextBlock Text="{Binding Price, Mode=OneWay}"
+                           Margin="10,0"
+                           FontSize="20">
+                </TextBlock>
+            </StackPanel>
+        </Grid>
 
+        <Grid Background="#99000000"
+              Visibility="{Binding IsProgressBarVisible, Mode=OneWay,Converter={StaticResource BoolToVis}}">
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <TextBlock Text="{x:Static p:Resources.ConnecingToServer}"
+                           Foreground="White"
+                           FontSize="20">
+                </TextBlock>
+                <ProgressBar Width="150"
+                             Height="30"
+                             Margin="0,10"
+                             IsIndeterminate="True">
+                </ProgressBar>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

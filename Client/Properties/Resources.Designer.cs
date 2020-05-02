@@ -61,7 +61,16 @@ namespace Client.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please Enter Client ID and It Should Be Number Only and Greater Than 0.
+        ///   Looks up a localized string similar to Connecting to server, please wait....
+        /// </summary>
+        public static string ConnecingToServer {
+            get {
+                return ResourceManager.GetString("ConnecingToServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter client ID and it should be number only and greater than 0.
         /// </summary>
         public static string EmptyID {
             get {
@@ -70,7 +79,7 @@ namespace Client.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please Enter Client Id and It Should Be Positive Number Only and Greater Than 0.
+        ///   Looks up a localized string similar to Please enter client ID and it should be number only and greater than 0.
         /// </summary>
         public static string EnterClientID_Text {
             get {
@@ -84,6 +93,24 @@ namespace Client.Properties {
         public static string Ok_Content {
             get {
                 return ResourceManager.GetString("Ok.Content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stock Price:-.
+        /// </summary>
+        public static string StockPrice {
+            get {
+                return ResourceManager.GetString("StockPrice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to Register, Please try again or check server availability.
+        /// </summary>
+        public static string UnableRegister {
+            get {
+                return ResourceManager.GetString("UnableRegister", resourceCulture);
             }
         }
     }

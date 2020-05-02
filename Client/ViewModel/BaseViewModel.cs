@@ -29,17 +29,14 @@ namespace Client.ViewModel
 
         public void OnPropertyChangedAsync([CallerMemberName]string propertyName = null)
         {
-            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+            try
             {
-                try
-                {
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-                }
-                catch (Exception ex)
-                {
-                    ObjFactory.Instance.CreateLogger().Log("OnPropertyChangedAsync = " + ex.Message, GetType().Name);
-                }
-            });
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+            catch (Exception ex)
+            {
+                ObjFactory.Instance.CreateLogger().Log("OnPropertyChangedAsync = " + ex.Message, GetType().Name);
+            }
         }
 
         #endregion PropertyChanged

@@ -1,9 +1,12 @@
 ﻿using Client.Command;
+using Client.Constants;
+using Client.Factory;
+using Client.StockService;
+using GalaSoft.MvvmLight.Messaging;
+using Server.Constants;
 using System;
-using System.Globalization;
-using System.Reflection;
-using System.Resources;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -73,6 +76,44 @@ namespace Client.ViewModel
 
         #endregion IsTradeUIVisible
 
+        #region IsProgressBarVisible
+
+        public bool IsProgressBarVisible
+        {
+            get { return _isProgressBarVisible; }
+            set
+            {
+                if (value == _isProgressBarVisible)
+                    return;
+
+                _isProgressBarVisible = value;
+                OnPropertyChangedAsync(nameof(IsProgressBarVisible));
+            }
+        }
+
+        private bool _isProgressBarVisible { get; set; }
+
+        #endregion IsProgressBarVisible
+
+        #region Price
+
+        public double Price
+        {
+            get { return _price; }
+            set
+            {
+                if (value == _price)
+                    return;
+
+                _price = value;
+                OnPropertyChangedAsync(nameof(Price));
+            }
+        }
+
+        private double _price;
+
+        #endregion Price
+
         #endregion INotifyPropertyChange Member
 
         #region Constructor
@@ -80,29 +121,43 @@ namespace Client.ViewModel
         public TradeWindowViewModel()
         {
             InitCommand();
+            InitMessenger();
         }
 
         #endregion Constructor
 
-        #region Init
+        #region InitCommand
 
         private void InitCommand()
         {
             StartCommand = new RelayCommand(new Action<object>(StartCommandClick));
         }
 
-        #endregion Init
+        #endregion InitCommand
 
         #region Private Methods
+
+        #region InitMessenger
+
+        private void InitMessenger()
+        {
+            Messenger.Default.Unregister<StockData>(this,
+                  MessengerToken.BROADCASTSTOCKPRICE, UpdatePrice);
+            Messenger.Default.Register<StockData>(this,
+                MessengerToken.BROADCASTSTOCKPRICE, UpdatePrice);
+        }
+
+        #endregion InitMessenger
 
         #region Button Click
 
         private void StartCommandClick(object obj)
         {
             if (!string.IsNullOrEmpty(ClientId?.Trim()) &&
-                new Regex("^[1-9]+$").IsMatch(ClientId.Trim()))
+                new Regex(Constant.REGEX_NUMBER_ONLY).IsMatch(ClientId.Trim()))
             {
-                IsTradeUIVisible = true;
+                IsProgressBarVisible = true;
+                StartRegisterClient();
             }
             else
             {
@@ -111,6 +166,38 @@ namespace Client.ViewModel
         }
 
         #endregion Button Click
+
+        #region Register Client
+
+        private async void StartRegisterClient()
+        {
+            await Task.Run(() => ObjFactory.Instance.CreateRegisterClients().Register(ClientId))
+                                .ContinueWith(task => CheckIsClientRegitered(task.Result));
+        }
+
+        private void CheckIsClientRegitered(bool isRegistered)
+        {
+            IsProgressBarVisible = false;
+            if (isRegistered)
+            {
+                IsTradeUIVisible = false;
+            }
+            else
+            {
+                MessageBox.Show(resourceManager.GetString("UnableRegister"));
+            }
+        }
+
+        #endregion Register Client
+
+        #region Update Data
+
+        private void UpdatePrice(StockData obj)
+        {
+            Price = obj.StockPrice;
+        }
+
+        #endregion Update Data
 
         #endregion Private Methods
     }

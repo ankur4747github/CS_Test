@@ -39,15 +39,15 @@
   <wsdl:message name="IStockService_RegisterClient_InputMessage">
     <wsdl:part name="parameters" element="tns:RegisterClient" />
   </wsdl:message>
-  <wsdl:message name="IStockService_BroadcastToClient_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:BroadcastToClient" />
+  <wsdl:message name="IStockService_BroadcastPriceToClient_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:BroadcastPriceToClient" />
   </wsdl:message>
   <wsdl:portType name="IStockService">
     <wsdl:operation name="RegisterClient">
       <wsdl:input wsaw:Action="http://tempuri.org/IStockService/RegisterClient" message="tns:IStockService_RegisterClient_InputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="BroadcastToClient">
-      <wsdl:output wsaw:Action="http://tempuri.org/IStockService/BroadcastToClient" message="tns:IStockService_BroadcastToClient_OutputCallbackMessage" />
+    <wsdl:operation name="BroadcastPriceToClient">
+      <wsdl:output wsaw:Action="http://tempuri.org/IStockService/BroadcastPriceToClient" message="tns:IStockService_BroadcastPriceToClient_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IStockService" type="tns:IStockService">
@@ -59,8 +59,8 @@
         <soap12:body use="literal" />
       </wsdl:input>
     </wsdl:operation>
-    <wsdl:operation name="BroadcastToClient">
-      <soap12:operation soapAction="http://tempuri.org/IStockService/BroadcastToClient" style="document" />
+    <wsdl:operation name="BroadcastPriceToClient">
+      <soap12:operation soapAction="http://tempuri.org/IStockService/BroadcastPriceToClient" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

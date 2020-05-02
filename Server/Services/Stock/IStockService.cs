@@ -13,6 +13,6 @@ namespace Server.StockServices
     public interface IBroadcastorCallBack
     {
         [OperationContract(IsOneWay = true)]
-        void BroadcastToClient(StockData eventData);
+        void BroadcastPriceToClient(StockData eventData);
     }
 }

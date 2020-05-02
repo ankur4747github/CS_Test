@@ -72,8 +72,8 @@ namespace Client.StockService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IStockServiceCallback {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IStockService/BroadcastToClient")]
-        void BroadcastToClient(Client.StockService.StockData eventData);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IStockService/BroadcastPriceToClient")]
+        void BroadcastPriceToClient(Client.StockService.StockData eventData);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

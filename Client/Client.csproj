@@ -101,13 +101,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Constants\Constant.cs" />
+    <Compile Include="Constants\MessengerToken.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Factory\ObjFactory.cs" />
     <Compile Include="Services\Logging\ILog.cs" />
     <Compile Include="Services\Logging\Logger.cs" />
+    <Compile Include="Services\Stock\IRegisterClients.cs" />
+    <Compile Include="Services\Stock\RegisterClient.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\TradeWindowViewModel.cs" />
+    <Compile Include="Services\Stock\BroadcastorCallback.cs" />
     <Compile Include="View\TradeWindow.xaml.cs">
       <DependentUpon>TradeWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

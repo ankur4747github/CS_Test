@@ -1,6 +1,6 @@
 ﻿namespace Services.Logging
 {
-    internal interface ILog
+    public interface ILog
     {
         void Log(string message, string className, bool Error = true);
     }

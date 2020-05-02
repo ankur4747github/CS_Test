@@ -117,13 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ConnecingToServer" xml:space="preserve">
+    <value>Connecting to server, please wait...</value>
+  </data>
   <data name="EmptyID" xml:space="preserve">
-    <value>Please Enter Client ID and It Should Be Number Only and Greater Than 0</value>
+    <value>Please enter client ID and it should be number only and greater than 0</value>
   </data>
   <data name="EnterClientID.Text" xml:space="preserve">
-    <value>Please Enter Client Id and It Should Be Positive Number Only and Greater Than 0</value>
+    <value>Please enter client ID and it should be number only and greater than 0</value>
   </data>
   <data name="Ok.Content" xml:space="preserve">
     <value>Ok</value>
+  </data>
+  <data name="StockPrice" xml:space="preserve">
+    <value>Stock Price:-</value>
+  </data>
+  <data name="UnableRegister" xml:space="preserve">
+    <value>Unable to Register, Please try again or check server availability</value>
   </data>
 </root>

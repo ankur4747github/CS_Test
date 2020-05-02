@@ -16,7 +16,7 @@ namespace Server.StockServices
             {
                 try
                 {
-                    client.Value.BroadcastToClient(data);
+                    client.Value.BroadcastPriceToClient(data);
                     ObjFactory.Instance.CreateLogger()
                         .Log("After BroadCast to clientId = " + client, this.GetType().Name, false);
                 }

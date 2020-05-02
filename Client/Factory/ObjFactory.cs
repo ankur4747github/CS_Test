@@ -1,6 +1,8 @@
 ﻿using Services.Logging;
 using System.Reflection;
+using Client.Services;
 using Unity;
+using Client.Services.Stock;
 
 namespace Client.Factory
 {
@@ -44,7 +46,7 @@ namespace Client.Factory
 
         #region Logs
 
-        internal ILog CreateLogger()
+        public ILog CreateLogger()
         {
             if (!_objContainer.IsRegistered(typeof(Logger), MethodBase.GetCurrentMethod().Name))
             {
@@ -54,5 +56,25 @@ namespace Client.Factory
         }
 
         #endregion Logs
+
+        #region Services
+        public IRegisterClient CreateRegisterClients()
+        {
+            if (!_objContainer.IsRegistered(typeof(RegisterClient), MethodBase.GetCurrentMethod().Name))
+            {
+                _objContainer.RegisterSingleton(typeof(RegisterClient), MethodBase.GetCurrentMethod().Name);
+            }
+            return (RegisterClient)_objContainer.Resolve(typeof(RegisterClient), MethodBase.GetCurrentMethod().Name);
+        }
+
+        public BroadcastorCallback CreateBroadcastorCallback()
+        {
+            if (!_objContainer.IsRegistered(typeof(BroadcastorCallback), MethodBase.GetCurrentMethod().Name))
+            {
+                _objContainer.RegisterSingleton(typeof(BroadcastorCallback), MethodBase.GetCurrentMethod().Name);
+            }
+            return (BroadcastorCallback)_objContainer.Resolve(typeof(BroadcastorCallback), MethodBase.GetCurrentMethod().Name);
+        }
+        #endregion
     }
 }
