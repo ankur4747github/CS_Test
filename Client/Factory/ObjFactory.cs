@@ -58,13 +58,13 @@ namespace Client.Factory
 
         #region Services
 
-        public IRegisterClient CreateRegisterClients()
+        public IStockService CreateRegisterClients()
         {
-            if (!_objContainer.IsRegistered(typeof(RegisterClient), MethodBase.GetCurrentMethod().Name))
+            if (!_objContainer.IsRegistered(typeof(Services.Stock.StockService), MethodBase.GetCurrentMethod().Name))
             {
-                _objContainer.RegisterSingleton(typeof(RegisterClient), MethodBase.GetCurrentMethod().Name);
+                _objContainer.RegisterSingleton(typeof(Services.Stock.StockService), MethodBase.GetCurrentMethod().Name);
             }
-            return (RegisterClient)_objContainer.Resolve(typeof(RegisterClient), MethodBase.GetCurrentMethod().Name);
+            return (Services.Stock.StockService)_objContainer.Resolve(typeof(Services.Stock.StockService), MethodBase.GetCurrentMethod().Name);
         }
 
         public BroadcastorCallback CreateBroadcastorCallback()
@@ -80,13 +80,13 @@ namespace Client.Factory
 
         #region Data
 
-        public StockService.PlaceOrderData CreateStockServicePlaceOrderData()
+        public ServerStockService.PlaceOrderData CreateStockServicePlaceOrderData()
         {
-            if (!_objContainer.IsRegistered(typeof(StockService.PlaceOrderData), MethodBase.GetCurrentMethod().Name))
+            if (!_objContainer.IsRegistered(typeof(ServerStockService.PlaceOrderData), MethodBase.GetCurrentMethod().Name))
             {
-                _objContainer.RegisterSingleton(typeof(StockService.PlaceOrderData), MethodBase.GetCurrentMethod().Name);
+                _objContainer.RegisterSingleton(typeof(ServerStockService.PlaceOrderData), MethodBase.GetCurrentMethod().Name);
             }
-            return (StockService.PlaceOrderData)_objContainer.Resolve(typeof(StockService.PlaceOrderData), MethodBase.GetCurrentMethod().Name);
+            return (ServerStockService.PlaceOrderData)_objContainer.Resolve(typeof(ServerStockService.PlaceOrderData), MethodBase.GetCurrentMethod().Name);
         }
 
         #endregion Data

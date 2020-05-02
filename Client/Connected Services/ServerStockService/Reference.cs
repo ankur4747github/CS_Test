@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Client.StockService {
+namespace Client.ServerStockService {
     using System.Runtime.Serialization;
     using System;
     
@@ -23,10 +23,10 @@ namespace Client.StockService {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool IsBuyField;
+        private int ClientIdField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool IsSellField;
+        private bool IsBuyField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private double PriceField;
@@ -45,6 +45,19 @@ namespace Client.StockService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ClientId {
+            get {
+                return this.ClientIdField;
+            }
+            set {
+                if ((this.ClientIdField.Equals(value) != true)) {
+                    this.ClientIdField = value;
+                    this.RaisePropertyChanged("ClientId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public bool IsBuy {
             get {
                 return this.IsBuyField;
@@ -53,19 +66,6 @@ namespace Client.StockService {
                 if ((this.IsBuyField.Equals(value) != true)) {
                     this.IsBuyField = value;
                     this.RaisePropertyChanged("IsBuy");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool IsSell {
-            get {
-                return this.IsSellField;
-            }
-            set {
-                if ((this.IsSellField.Equals(value) != true)) {
-                    this.IsSellField = value;
-                    this.RaisePropertyChanged("IsSell");
                 }
             }
         }
@@ -152,36 +152,36 @@ namespace Client.StockService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="StockService.IStockService", CallbackContract=typeof(Client.StockService.IStockServiceCallback))]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServerStockService.IStockService", CallbackContract=typeof(Client.ServerStockService.IStockServiceCallback))]
     public interface IStockService {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IStockService/RegisterClient")]
-        void RegisterClient(string clientId);
+        void RegisterClient(int clientId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IStockService/RegisterClient")]
-        System.Threading.Tasks.Task RegisterClientAsync(string clientId);
+        System.Threading.Tasks.Task RegisterClientAsync(int clientId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStockService/PlaceOrder", ReplyAction="http://tempuri.org/IStockService/PlaceOrderResponse")]
-        void PlaceOrder(Client.StockService.PlaceOrderData data);
+        void PlaceOrder(Client.ServerStockService.PlaceOrderData data);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStockService/PlaceOrder", ReplyAction="http://tempuri.org/IStockService/PlaceOrderResponse")]
-        System.Threading.Tasks.Task PlaceOrderAsync(Client.StockService.PlaceOrderData data);
+        System.Threading.Tasks.Task PlaceOrderAsync(Client.ServerStockService.PlaceOrderData data);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IStockServiceCallback {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IStockService/BroadcastPriceToClient")]
-        void BroadcastPriceToClient(Client.StockService.StockData eventData);
+        void BroadcastPriceToClient(Client.ServerStockService.StockData eventData);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IStockServiceChannel : Client.StockService.IStockService, System.ServiceModel.IClientChannel {
+    public interface IStockServiceChannel : Client.ServerStockService.IStockService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class StockServiceClient : System.ServiceModel.DuplexClientBase<Client.StockService.IStockService>, Client.StockService.IStockService {
+    public partial class StockServiceClient : System.ServiceModel.DuplexClientBase<Client.ServerStockService.IStockService>, Client.ServerStockService.IStockService {
         
         public StockServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
                 base(callbackInstance) {
@@ -203,19 +203,19 @@ namespace Client.StockService {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void RegisterClient(string clientId) {
+        public void RegisterClient(int clientId) {
             base.Channel.RegisterClient(clientId);
         }
         
-        public System.Threading.Tasks.Task RegisterClientAsync(string clientId) {
+        public System.Threading.Tasks.Task RegisterClientAsync(int clientId) {
             return base.Channel.RegisterClientAsync(clientId);
         }
         
-        public void PlaceOrder(Client.StockService.PlaceOrderData data) {
+        public void PlaceOrder(Client.ServerStockService.PlaceOrderData data) {
             base.Channel.PlaceOrder(data);
         }
         
-        public System.Threading.Tasks.Task PlaceOrderAsync(Client.StockService.PlaceOrderData data) {
+        public System.Threading.Tasks.Task PlaceOrderAsync(Client.ServerStockService.PlaceOrderData data) {
             return base.Channel.PlaceOrderAsync(data);
         }
     }

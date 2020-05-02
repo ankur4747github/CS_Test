@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="OwgE06uaPMMo1pimxU/4eg7bHshiAPXiA+NCC0gEXbU=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="GDS21ukDd1RSGIejuwMKK4gJ5n9jtKjWy7veXnzcVwQ=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="netTcpBinding" name="NetTcpBinding_IStockService">
       <properties>
@@ -121,7 +121,7 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="NetTcpBinding_IStockService" contract="StockService.IStockService" bindingType="netTcpBinding" address="net.tcp://localhost:8090/StockService" bindingConfiguration="NetTcpBinding_IStockService">
+    <endpoint name="NetTcpBinding_IStockService" contract="ServerStockService.IStockService" bindingType="netTcpBinding" address="net.tcp://localhost:8090/StockService" bindingConfiguration="NetTcpBinding_IStockService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>net.tcp://localhost:8090/StockService</serializedValue>
@@ -136,7 +136,7 @@
           <serializedValue>NetTcpBinding_IStockService</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>StockService.IStockService</serializedValue>
+          <serializedValue>ServerStockService.IStockService</serializedValue>
         </property>
         <property path="/headers" isComplexType="true" isExplicitlyDefined="false" clrType="System.ServiceModel.Configuration.AddressHeaderCollectionElement, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>System.ServiceModel.Configuration.AddressHeaderCollectionElement</serializedValue>

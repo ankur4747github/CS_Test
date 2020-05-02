@@ -1,4 +1,5 @@
 ﻿using Server.Model;
+using Server.Services.Stock;
 using Server.StockServices;
 using Services.Logging;
 using System.Reflection;
@@ -90,6 +91,14 @@ namespace Server.Factory
             return (BroadCastData)_objContainer.Resolve(typeof(BroadCastData), MethodBase.GetCurrentMethod().Name);
         }
 
+        public IOrder CreateOrder()
+        {
+            if (!_objContainer.IsRegistered(typeof(Order), MethodBase.GetCurrentMethod().Name))
+            {
+                _objContainer.RegisterSingleton(typeof(Order), MethodBase.GetCurrentMethod().Name);
+            }
+            return (Order)_objContainer.Resolve(typeof(Order), MethodBase.GetCurrentMethod().Name);
+        }
         #endregion Services
     }
 }

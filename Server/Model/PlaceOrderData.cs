@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.Serialization;
 
 namespace Server.Model
 {
     [DataContract()]
     public class PlaceOrderData
     {
+        [DataMember]
+        public int ClientId { get; set; }
+
         [DataMember]
         public double Price { get; set; }
 
@@ -18,8 +16,5 @@ namespace Server.Model
 
         [DataMember]
         public bool IsBuy { get; set; }
-
-        [DataMember]
-        public bool IsSell { get; set; }
     }
 }

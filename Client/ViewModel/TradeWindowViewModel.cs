@@ -1,7 +1,7 @@
 ﻿using Client.Command;
 using Client.Constants;
 using Client.Factory;
-using Client.StockService;
+using Client.ServerStockService;
 using GalaSoft.MvvmLight.Messaging;
 using Server.Constants;
 using System;
@@ -76,7 +76,7 @@ namespace Client.ViewModel
 
         #region ClientId
 
-        public string ClientId
+        public int ClientId
         {
             get { return _clientId; }
             set
@@ -89,7 +89,7 @@ namespace Client.ViewModel
             }
         }
 
-        private string _clientId { get; set; }
+        private int _clientId { get; set; }
 
         #endregion ClientId
 
@@ -227,12 +227,12 @@ namespace Client.ViewModel
 
         #region Button Click
 
-        private void StartCommandClick(object obj)
+        private async void StartCommandClick(object obj)
         {
-            if (!string.IsNullOrEmpty(ClientId?.Trim()) &&
-                new Regex(Constant.REGEX_NUMBER_ONLY).IsMatch(ClientId.Trim()))
+            if (ClientId > 0)
             {
                 IsProgressBarVisible = true;
+                await Task.Delay(1000);
                 StartRegisterClient();
             }
             else
@@ -319,7 +319,7 @@ namespace Client.ViewModel
             var data = ObjFactory.Instance.CreateStockServicePlaceOrderData();
             data.Price = BuySellPrice;
             data.IsBuy = isBuy;
-            data.IsSell = !isBuy;
+            data.ClientId = ClientId;
             data.Quantity = Quantity;
             return data;
         }

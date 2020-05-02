@@ -8,7 +8,7 @@ namespace Server.StockServices
     public interface IStockService
     {
         [OperationContract(IsOneWay = true)]
-        void RegisterClient(string clientId);
+        void RegisterClient(int clientId);
 
         [OperationContract]
         [WebInvoke(Method = "POST",

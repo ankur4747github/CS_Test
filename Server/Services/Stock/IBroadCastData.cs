@@ -10,6 +10,6 @@ namespace Server.StockServices
     public interface IBroadCastData
     {
         void BroadCastStockPrice(StockData data,
-            IReadOnlyDictionary<string, IBroadcastorCallBack> clients);
+            IReadOnlyDictionary<int, IBroadcastorCallBack> clients);
     }
 }

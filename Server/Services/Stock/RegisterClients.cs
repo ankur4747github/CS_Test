@@ -7,16 +7,16 @@ namespace Server.StockServices
 {
     public class RegisterClients : IRegisterClients
     {
-        private Dictionary<string, IBroadcastorCallBack> _clients { get; set; }
+        private Dictionary<int, IBroadcastorCallBack> _clients { get; set; }
 
         public RegisterClients()
         {
-            _clients = new Dictionary<string, IBroadcastorCallBack>();
+            _clients = new Dictionary<int, IBroadcastorCallBack>();
         }
 
-        public void RegisterClient(string clientId)
+        public void RegisterClient(int clientId)
         {
-            if (!string.IsNullOrEmpty(clientId))
+            if (clientId > 0)
             {
                 IBroadcastorCallBack callback =
                     OperationContext.Current.GetCallbackChannel<IBroadcastorCallBack>();
@@ -33,7 +33,7 @@ namespace Server.StockServices
             }
         }
 
-        public void UnRegisterClient(List<string> inactiveClients)
+        public void UnRegisterClient(List<int> inactiveClients)
         {
             if (inactiveClients.Count > 0)
             {
@@ -46,7 +46,7 @@ namespace Server.StockServices
             }
         }
 
-        public IReadOnlyDictionary<string, IBroadcastorCallBack> GetClients()
+        public IReadOnlyDictionary<int, IBroadcastorCallBack> GetClients()
         {
             return _clients;
         }

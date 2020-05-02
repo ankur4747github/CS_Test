@@ -8,9 +8,9 @@ namespace Server.StockServices
 {
     public interface IRegisterClients
     {
-        void RegisterClient(string clientId);
-        void UnRegisterClient(List<string> inactiveClients);
-        IReadOnlyDictionary<string, IBroadcastorCallBack> GetClients();
+        void RegisterClient(int clientId);
+        void UnRegisterClient(List<int> inactiveClients);
+        IReadOnlyDictionary<int, IBroadcastorCallBack> GetClients();
 
 
 

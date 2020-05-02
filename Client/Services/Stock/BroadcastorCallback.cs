@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 namespace Client.Services.Stock
 {
-    public class BroadcastorCallback : StockService.IStockServiceCallback
+    public class BroadcastorCallback : ServerStockService.IStockServiceCallback
     {
         #region Public Methods
 
-        public void BroadcastPriceToClient(StockService.StockData eventData)
+        public void BroadcastPriceToClient(ServerStockService.StockData eventData)
         {
             Task.Run(() => BroadcastPriceToUI(eventData));
         }
@@ -17,7 +17,7 @@ namespace Client.Services.Stock
 
         #region Private Methods
 
-        private void BroadcastPriceToUI(StockService.StockData eventData)
+        private void BroadcastPriceToUI(ServerStockService.StockData eventData)
         {
             Messenger.Default.Send(eventData, MessengerToken.BROADCASTSTOCKPRICE);
         }

@@ -27,7 +27,7 @@ namespace Server.StockServices
 
         #region Public Methods
 
-        public void RegisterClient(string clientId)
+        public void RegisterClient(int clientId)
         {
             ObjFactory.Instance.CreateLogger()
                     .Log("Start Registered ClientId =" + clientId, this.GetType().Name, false);
@@ -39,7 +39,7 @@ namespace Server.StockServices
 
         public void PlaceOrder(PlaceOrderData data)
         {
-             
+            ObjFactory.Instance.CreateOrder().AddOrderIntoQueue(data);
         }
 
 

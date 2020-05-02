@@ -9,9 +9,9 @@ namespace Server.StockServices
         #region Public Methods
 
         public void BroadCastStockPrice(StockData data,
-            IReadOnlyDictionary<string, IBroadcastorCallBack> clients)
+            IReadOnlyDictionary<int, IBroadcastorCallBack> clients)
         {
-            var inactiveClients = new List<string>();
+            var inactiveClients = new List<int>();
             foreach (var client in clients)
             {
                 try
@@ -34,7 +34,7 @@ namespace Server.StockServices
 
         #region Private Methods
 
-        private static void RemoveInactiveClients(List<string> inactiveClients)
+        private static void RemoveInactiveClients(List<int> inactiveClients)
         {
             if (inactiveClients.Count > 0)
             {

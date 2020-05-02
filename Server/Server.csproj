@@ -60,13 +60,16 @@
   <ItemGroup>
     <Compile Include="Constants\Constant.cs" />
     <Compile Include="Factory\ObjFactory.cs" />
+    <Compile Include="Model\PendingOrderData.cs" />
     <Compile Include="Model\PlaceOrderData.cs" />
     <Compile Include="Services\Logging\ILog.cs" />
     <Compile Include="Services\Logging\Logger.cs" />
     <Compile Include="Services\Stock\BroadCastData.cs" />
     <Compile Include="Services\Stock\IBroadCastData.cs" />
+    <Compile Include="Services\Stock\IOrder.cs" />
     <Compile Include="Services\Stock\IRegisterClients.cs" />
     <Compile Include="Services\Stock\IStockService.cs" />
+    <Compile Include="Services\Stock\Order.cs" />
     <Compile Include="Services\Stock\RegisterClients.cs" />
     <Compile Include="Services\Stock\StockService.cs" />
     <Compile Include="Program.cs" />

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Client.Services.Stock
 {
-    public interface IRegisterClient
+    public interface IStockService
     {
-        bool Register(string clientId);
+        bool Register(int clientId);
 
-        void PlaceOrder(StockService.PlaceOrderData data);
+        void PlaceOrder(ServerStockService.PlaceOrderData data);
     }
 }

@@ -96,7 +96,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Command\RelayCommand.cs" />
-    <Compile Include="Connected Services\StockService\Reference.cs">
+    <Compile Include="Connected Services\ServerStockService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -108,8 +108,8 @@
     <Compile Include="Factory\ObjFactory.cs" />
     <Compile Include="Services\Logging\ILog.cs" />
     <Compile Include="Services\Logging\Logger.cs" />
-    <Compile Include="Services\Stock\IRegisterClients.cs" />
-    <Compile Include="Services\Stock\RegisterClient.cs" />
+    <Compile Include="Services\Stock\IStockService.cs" />
+    <Compile Include="Services\Stock\StockService.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\TradeWindowViewModel.cs" />
     <Compile Include="Services\Stock\BroadcastorCallback.cs" />
@@ -136,16 +136,16 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Connected Services\StockService\item.xsd">
+    <None Include="Connected Services\ServerStockService\item.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\StockService\item1.xsd">
+    <None Include="Connected Services\ServerStockService\item1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\StockService\item2.xsd">
+    <None Include="Connected Services\ServerStockService\item2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\StockService\StockService.wsdl" />
+    <None Include="Connected Services\ServerStockService\StockService.wsdl" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -162,19 +162,19 @@
     <Folder Include="Messenger\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\StockService\" />
+    <WCFMetadataStorage Include="Connected Services\ServerStockService\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\StockService\item.disco" />
+    <None Include="Connected Services\ServerStockService\item.disco" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\StockService\configuration91.svcinfo" />
+    <None Include="Connected Services\ServerStockService\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\StockService\configuration.svcinfo" />
+    <None Include="Connected Services\ServerStockService\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\StockService\Reference.svcmap">
+    <None Include="Connected Services\ServerStockService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

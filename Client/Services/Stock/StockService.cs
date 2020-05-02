@@ -3,19 +3,17 @@ using System;
 
 namespace Client.Services.Stock
 {
-    public class RegisterClient : IRegisterClient
+    public class StockService : IStockService
     {
         #region Fields
 
-        private StockService.StockServiceClient _client { get; set; }
-
-       
+        private ServerStockService.StockServiceClient _client { get; set; }
 
         #endregion Fields
 
         #region Public Methods
 
-        public bool Register(string clientId)
+        public bool Register(int clientId)
         {
             try
             {
@@ -29,12 +27,12 @@ namespace Client.Services.Stock
                 var context = new System.ServiceModel.InstanceContext(cb);
                 if (context != null)
                 {
-                    _client = new StockService.StockServiceClient(context);
+                    _client = new ServerStockService.StockServiceClient(context);
                     _client?.RegisterClient(clientId);
                     return true;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ObjFactory.Instance.CreateLogger()
                     .Log("Register = " + ex.Message, GetType().Name);
@@ -42,7 +40,7 @@ namespace Client.Services.Stock
             return false;
         }
 
-        public void PlaceOrder(StockService.PlaceOrderData data)
+        public void PlaceOrder(ServerStockService.PlaceOrderData data)
         {
             if (_client != null)
             {
