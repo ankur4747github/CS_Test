@@ -99,7 +99,7 @@
             </Grid>
         </Grid>
 
-        <!--<Grid Background="#99000000"
+        <Grid Background="#99000000"
               Visibility="{Binding IsProgressBarVisible, Mode=OneWay,Converter={StaticResource BoolToVis}}">
             <StackPanel HorizontalAlignment="Center"
                         VerticalAlignment="Center">
@@ -113,6 +113,6 @@
                              IsIndeterminate="True">
                 </ProgressBar>
             </StackPanel>
-        </Grid>-->
+        </Grid>
     </Grid>
 </Window>

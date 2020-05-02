@@ -1,6 +1,5 @@
 ﻿using Server.Factory;
 using Server.Model;
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -151,36 +150,14 @@ namespace Server.Services.Stock
             {
                 var value = _buyPendinfOrders[key];
                 ExecuteSellOrder(data, value, key);
-            }
-        }
-
-        private void ExecuteSellOrder(PlaceOrderData data, Queue<PlaceOrderData> value, double key)
-        {
-            if (value.Count > 0)
-            {
-                var oldOrderData = value.Peek();
-                if (data.Quantity > oldOrderData.Quantity)
+                if (data.Quantity == 0)
                 {
-                    int tradeQuantity = data.Quantity - oldOrderData.Quantity;
-                    int sellerId = data.ClientId;
-                    int buyerID = oldOrderData.ClientId;
-                    double tradeExecutePrice = oldOrderData.Price;
-                    oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
-                }
-                else
-                {
-                    int tradeQuantity = oldOrderData.Quantity - data.Quantity;
-                    int buyerID = data.ClientId;
-                    int sellerId = oldOrderData.ClientId;
-                    double tradeExecutePrice = oldOrderData.Price;
-                    oldOrderData.Quantity = 0;
-                    value.Dequeue();
-                    ExecuteSellOrder(data, value, key);
+                    break;
                 }
             }
-            else
+            if (data.Quantity > 0)
             {
-                _buyPendinfOrders.Remove(key);
+                AddNewDataInTheSellQueue(data);
             }
         }
 
@@ -193,6 +170,45 @@ namespace Server.Services.Stock
             {
                 var value = _sellPendinfOrders[key];
                 ExecuteBuyOrder(data, value, key);
+                if (data.Quantity == 0)
+                {
+                    break;
+                }
+            }
+            if (data.Quantity > 0)
+            {
+                AddNewDataInTheBuyQueue(data);
+            }
+        }
+
+        private void ExecuteSellOrder(PlaceOrderData data, Queue<PlaceOrderData> value, double key)
+        {
+            if (value.Count > 0)
+            {
+                var oldOrderData = value.Peek();
+                if (data.Quantity > oldOrderData.Quantity)
+                {
+                    int tradeQuantity = oldOrderData.Quantity;
+                    oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
+                    data.Quantity = data.Quantity - tradeQuantity;
+                    UpdateTrade(oldOrderData.ClientId, data.ClientId, tradeQuantity, oldOrderData.Price);
+                }
+                else
+                {
+                    int tradeQuantity = data.Quantity;
+                    oldOrderData.Quantity = 0;
+                    data.Quantity = data.Quantity - tradeQuantity;
+                    UpdateTrade(oldOrderData.ClientId, data.ClientId, tradeQuantity, oldOrderData.Price);
+                    value.Dequeue();
+                    if (data.Quantity > 0)
+                    {
+                        ExecuteSellOrder(data, value, key);
+                    }
+                }
+            }
+            else
+            {
+                _buyPendinfOrders.Remove(key);
             }
         }
 
@@ -203,21 +219,20 @@ namespace Server.Services.Stock
                 var oldOrderData = value.Peek();
                 if (data.Quantity > oldOrderData.Quantity)
                 {
-                    int tradeQuantity = data.Quantity - oldOrderData.Quantity;
-                    int buyerID = data.ClientId;
-                    int sellerId = oldOrderData.ClientId;
-                    double tradeExecutePrice = oldOrderData.Price;
+                    int tradeQuantity = oldOrderData.Quantity;
+                    UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price);
                     oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
                 }
                 else
                 {
-                    int tradeQuantity = oldOrderData.Quantity - data.Quantity;
-                    int buyerID = data.ClientId;
-                    int sellerId = oldOrderData.ClientId;
-                    double tradeExecutePrice = oldOrderData.Price;
+                    int tradeQuantity = data.Quantity;
+                    UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price);
                     oldOrderData.Quantity = 0;
                     value.Dequeue();
-                    ExecuteSellOrder(data, value, key);
+                    if (data.Quantity > 0)
+                    {
+                        ExecuteSellOrder(data, value, key);
+                    }
                 }
             }
             else
@@ -227,6 +242,14 @@ namespace Server.Services.Stock
         }
 
         #endregion Match Order
+
+        #region After Trade
+
+        private void UpdateTrade(int buyUserId, int sellUserId, int tradeQuantity, double price)
+        {
+        }
+
+        #endregion After Trade
 
         #endregion Private Method
     }
