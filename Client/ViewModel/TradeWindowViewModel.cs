@@ -16,7 +16,7 @@ namespace Client.ViewModel
     {
         #region Button Command
 
-        #region SelectProfile Buttom Command
+        #region StartCommand
 
         private ICommand _startCommand;
 
@@ -32,7 +32,43 @@ namespace Client.ViewModel
             }
         }
 
-        #endregion SelectProfile Buttom Command
+        #endregion StartCommand
+
+        #region BuyCommand
+
+        private ICommand _buyCommand;
+
+        public ICommand BuyCommand
+        {
+            get
+            {
+                return _buyCommand;
+            }
+            set
+            {
+                _buyCommand = value;
+            }
+        }
+
+        #endregion BuyCommand
+
+        #region SellCommand
+
+        private ICommand _sellCommand;
+
+        public ICommand SellCommand
+        {
+            get
+            {
+                return _sellCommand;
+            }
+            set
+            {
+                _sellCommand = value;
+            }
+        }
+
+        #endregion SellCommand
 
         #endregion Button Command
 
@@ -56,6 +92,44 @@ namespace Client.ViewModel
         private string _clientId { get; set; }
 
         #endregion ClientId
+
+        #region BuySellPrice
+
+        public double BuySellPrice
+        {
+            get { return _buySellPrice; }
+            set
+            {
+                if (value == _buySellPrice)
+                    return;
+
+                _buySellPrice = value;
+                OnPropertyChangedAsync(nameof(BuySellPrice));
+            }
+        }
+
+        private double _buySellPrice { get; set; }
+
+        #endregion BuySellPrice
+
+        #region Quantity
+
+        public int Quantity
+        {
+            get { return _quantity; }
+            set
+            {
+                if (value == _quantity)
+                    return;
+
+                _quantity = value;
+                OnPropertyChangedAsync(nameof(Quantity));
+            }
+        }
+
+        private int _quantity { get; set; }
+
+        #endregion Quantity
 
         #region IsTradeUIVisible
 
@@ -131,7 +205,11 @@ namespace Client.ViewModel
         private void InitCommand()
         {
             StartCommand = new RelayCommand(new Action<object>(StartCommandClick));
+            BuyCommand = new RelayCommand(new Action<object>(BuyCommandClick));
+            SellCommand = new RelayCommand(new Action<object>(SellCommandClick));
         }
+
+        
 
         #endregion InitCommand
 
@@ -165,6 +243,24 @@ namespace Client.ViewModel
             }
         }
 
+        private void SellCommandClick(object obj)
+        {
+            if (IsValidPriceAndQuantity())
+            {
+
+            }
+        }
+
+       
+
+        private void BuyCommandClick(object obj)
+        {
+            if (IsValidPriceAndQuantity())
+            {
+
+            }
+        }
+
         #endregion Button Click
 
         #region Register Client
@@ -180,7 +276,7 @@ namespace Client.ViewModel
             IsProgressBarVisible = false;
             if (isRegistered)
             {
-                IsTradeUIVisible = false;
+                IsTradeUIVisible = true;
             }
             else
             {
@@ -198,6 +294,21 @@ namespace Client.ViewModel
         }
 
         #endregion Update Data
+
+        #region Validation
+        private bool IsValidPriceAndQuantity()
+        {
+            if(BuySellPrice > 0 && Quantity > 0)
+            {
+                return true;
+            }
+            else
+            {
+                MessageBox.Show(resourceManager.GetString("ValidPriceQuantity"));
+            }
+            return false;
+        }
+        #endregion
 
         #endregion Private Methods
     }

@@ -61,6 +61,15 @@ namespace Client.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Buy.
+        /// </summary>
+        public static string Buy {
+            get {
+                return ResourceManager.GetString("Buy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connecting to server, please wait....
         /// </summary>
         public static string ConnecingToServer {
@@ -88,11 +97,38 @@ namespace Client.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter Price.
+        /// </summary>
+        public static string EnterPrice {
+            get {
+                return ResourceManager.GetString("EnterPrice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter Quantity.
+        /// </summary>
+        public static string EnterQuantity {
+            get {
+                return ResourceManager.GetString("EnterQuantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ok.
         /// </summary>
         public static string Ok_Content {
             get {
                 return ResourceManager.GetString("Ok.Content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sell.
+        /// </summary>
+        public static string Sell {
+            get {
+                return ResourceManager.GetString("Sell", resourceCulture);
             }
         }
         
@@ -111,6 +147,15 @@ namespace Client.Properties {
         public static string UnableRegister {
             get {
                 return ResourceManager.GetString("UnableRegister", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter valid price and quantity.
+        /// </summary>
+        public static string ValidPriceQuantity {
+            get {
+                return ResourceManager.GetString("ValidPriceQuantity", resourceCulture);
             }
         }
     }
