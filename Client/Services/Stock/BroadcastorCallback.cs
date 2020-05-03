@@ -7,7 +7,6 @@ namespace Client.Services.Stock
 {
     public class BroadcastorCallback : IStockServiceCallback
     {
-       
         #region Public Methods
 
         public void BroadcastPriceToClient(StockData eventData)
@@ -19,12 +18,12 @@ namespace Client.Services.Stock
         {
             Task.Run(() => Messenger.Default.Send(eventData, MessengerToken.BROADCASTTRADEDATA));
         }
+
         public void BroadCastMarketOrderBookData(MarketOrderBookData eventData)
         {
             Task.Run(() => Messenger.Default.Send(eventData, MessengerToken.BROADCASTMARKETORDERBOOK));
         }
+
         #endregion Public Methods
-
-
     }
 }

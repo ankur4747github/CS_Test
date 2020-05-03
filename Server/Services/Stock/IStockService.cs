@@ -10,11 +10,7 @@ namespace Server.StockServices
         [OperationContract(IsOneWay = true)]
         void RegisterClient(int clientId);
 
-        [OperationContract]
-        [WebInvoke(Method = "POST",
-            ResponseFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.Wrapped,
-            UriTemplate = "json/{id}")]
+        [OperationContract(IsOneWay = true)]
         void PlaceOrder(PlaceOrderData data);
     }
 

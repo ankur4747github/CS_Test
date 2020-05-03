@@ -6,7 +6,6 @@ using Client.ServerStockService;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -301,7 +300,11 @@ namespace Client.ViewModel
                 ObjFactory.Instance.CreateLogger().Log(string.Format("Start Sell Price {0} Quantity {1}",
                     BuySellPrice, Quantity), GetType().Name, false);
                 var data = GetOrderData(false);
-                ObjFactory.Instance.CreateRegisterClients().PlaceOrder(data);
+                if (!ObjFactory.Instance.CreateRegisterClients().PlaceOrder(data))
+                {
+                    IsTradeUIVisible = false;
+                    MessageBox.Show(resourceManager.GetString("PlaceOrderFailed"));
+                }
             }
         }
 
@@ -312,7 +315,11 @@ namespace Client.ViewModel
                 ObjFactory.Instance.CreateLogger().Log(string.Format("Start Buy Price {0} Quantity {1}",
                     BuySellPrice, Quantity), GetType().Name, false);
                 var data = GetOrderData(true);
-                ObjFactory.Instance.CreateRegisterClients().PlaceOrder(data);
+                if (!ObjFactory.Instance.CreateRegisterClients().PlaceOrder(data))
+                {
+                    IsTradeUIVisible = false;
+                    MessageBox.Show(resourceManager.GetString("PlaceOrderFailed"));
+                }
             }
         }
 
@@ -382,57 +389,75 @@ namespace Client.ViewModel
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
                 MarketOrderDataList.Clear();
+                UpdateBuyOrderBook(obj);
+                UpdateSellOrderBook(obj);
             });
-            UpdateSellOrderBook(obj);
-            UpdateBuyOrderBook(obj);
         }
 
         private void UpdateBuyOrderBook(MarketOrderBookData obj)
         {
-            List<double> buyKeyList = obj.BuyPendingOrders.Select(x => x.Key).ToList();
-            if (buyKeyList.Count > 0)
+            if (obj.BuyPendingOrders.Count() > 0)
             {
-                buyKeyList = buyKeyList.OrderByDescending(x => x).ToList();
+                var list = obj.BuyPendingOrders.OrderBy(x => x.Price).ToList();
 
-                foreach (var key in buyKeyList)
+                foreach (var item in list)
                 {
                     var marketData = ObjFactory.Instance.CreateMarketOrderBookData();
-                    marketData.Price = key;
-                    marketData.MyAskQuantity = obj.BuyPendingOrders[key]
-                                                .Where(x => x.ClientId == ClientId)
-                                                .Sum(x => x.Quantity);
-                    marketData.MrktAskQuantity = obj.BuyPendingOrders[key]
-                                                .Sum(x => x.Quantity);
-                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    if (MarketOrderDataList.Any(x => x.Price == item.Price))
                     {
+                        marketData = MarketOrderDataList.Where(x => x.Price == item.Price).FirstOrDefault();
+                        AddAskMrktQuantity(item, marketData);
+                    }
+                    else
+                    {
+                        marketData.Price = item.Price;
+                        AddAskMrktQuantity(item, marketData);
                         MarketOrderDataList.Add(marketData);
-                    });
+                    }
                 }
             }
         }
 
         private void UpdateSellOrderBook(MarketOrderBookData obj)
         {
-            List<double> sellKeyList = obj.SellPendingOrders.Select(x => x.Key).ToList();
-            if (sellKeyList.Count > 0)
+            if (obj.SellPendingOrders.Count() > 0)
             {
-                sellKeyList = sellKeyList.OrderByDescending(x => x).ToList();
-
-                foreach (var key in sellKeyList)
+                var list = obj.SellPendingOrders.OrderBy(x => x.Price).ToList();
+                foreach (var item in list)
                 {
                     var marketData = ObjFactory.Instance.CreateMarketOrderBookData();
-                    marketData.Price = key;
-                    marketData.MyBidQuantity = obj.SellPendingOrders[key]
-                                                .Where(x => x.ClientId == ClientId)
-                                                .Sum(x => x.Quantity);
-                    marketData.MrktBidQuantity = obj.SellPendingOrders[key]
-                                                .Sum(x => x.Quantity);
-                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
+
+                    if (MarketOrderDataList.Any(x => x.Price == item.Price))
                     {
+                        marketData = MarketOrderDataList.Where(x => x.Price == item.Price).FirstOrDefault();
+                        AddBidQuantity(item, marketData);
+                    }
+                    else
+                    {
+                        marketData.Price = item.Price;
+                        AddBidQuantity(item, marketData);
                         MarketOrderDataList.Add(marketData);
-                    });
+                    }
                 }
             }
+        }
+
+        private void AddAskMrktQuantity(PlaceOrderData item, MarketOrderData marketData)
+        {
+            if (item.ClientId == ClientId)
+            {
+                marketData.MyAskQuantity = marketData.MyAskQuantity + item.Quantity;
+            }
+            marketData.MrktAskQuantity = marketData.MrktAskQuantity + item.Quantity;
+        }
+
+        private void AddBidQuantity(PlaceOrderData item, MarketOrderData marketData)
+        {
+            if (item.ClientId == ClientId)
+            {
+                marketData.MyBidQuantity = marketData.MyBidQuantity + item.Quantity;
+            }
+            marketData.MrktBidQuantity = marketData.MrktBidQuantity + item.Quantity;
         }
 
         #endregion OrderBook

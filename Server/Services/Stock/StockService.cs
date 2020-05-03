@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 namespace Server.StockServices
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
-    internal class StockService : IStockService
+    public class StockService : IStockService
     {
-        #region Private Fields
+        #region Fields
 
         private object _locker { get; set; }
 
-        #endregion Private Fields
+        #endregion Fields
 
         #region Constructor
 
         public StockService()
         {
             _locker = new object();
-            StartBroadCastingPrice();
+            Task.Run(() => StartBroadCastingPrice());
         }
 
         #endregion Constructor
@@ -42,29 +42,29 @@ namespace Server.StockServices
             ObjFactory.Instance.CreateOrder().AddOrderIntoQueue(data);
         }
 
-
         #endregion Public Methods
 
         #region Private Methods
 
         private async void StartBroadCastingPrice()
         {
-            var eventDataType = ObjFactory.Instance.CreateStockData();
-            eventDataType.StockPrice = new Random().Next(100, 120);
-            ObjFactory.Instance.CreateLogger()
-                    .Log("BroadCast Price = " + eventDataType.StockPrice, this.GetType().Name, false);
-            lock (_locker)
+            if (ObjFactory.Instance.CreateRegisterClients().GetClients() != null &&
+                ObjFactory.Instance.CreateRegisterClients().GetClients().Count > 0)
             {
-                ObjFactory.Instance.CreateBroadCastData()
-                    .BroadCastStockPrice(eventDataType,
-                    ObjFactory.Instance.CreateRegisterClients().GetClients());
+                var eventDataType = ObjFactory.Instance.CreateStockData();
+                eventDataType.StockPrice = new Random().Next(100, 120);
+                ObjFactory.Instance.CreateLogger()
+                        .Log("BroadCast Price = " + eventDataType.StockPrice, this.GetType().Name, false);
+                lock (_locker)
+                {
+                    ObjFactory.Instance.CreateBroadCastData()
+                        .BroadCastStockPrice(eventDataType,
+                        ObjFactory.Instance.CreateRegisterClients().GetClients());
+                }
             }
-            
             await Task.Delay(500);
             StartBroadCastingPrice();
         }
-
-      
 
         #endregion Private Methods
     }

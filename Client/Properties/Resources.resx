@@ -120,6 +120,9 @@
   <data name="Buy" xml:space="preserve">
     <value>Buy</value>
   </data>
+  <data name="ClientDisconnected" xml:space="preserve">
+    <value>Client disconnected from server</value>
+  </data>
   <data name="ClientId" xml:space="preserve">
     <value>Client ID:- </value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="Ok.Content" xml:space="preserve">
     <value>Ok</value>
+  </data>
+  <data name="PlaceOrderFailed" xml:space="preserve">
+    <value>Place order failed - Server disconnected</value>
   </data>
   <data name="Sell" xml:space="preserve">
     <value>Sell</value>

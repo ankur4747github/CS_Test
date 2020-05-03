@@ -1,27 +1,30 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Threading;
-using Client.Factory;
+﻿using Client.Factory;
+using GalaSoft.MvvmLight;
 using System;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Resources;
 using System.Reflection;
+using System.Resources;
+using System.Runtime.CompilerServices;
 
 namespace Client.ViewModel
 {
     public abstract class BaseViewModel : ViewModelBase, INotifyPropertyChanged
     {
         #region Fields
+
         public ResourceManager resourceManager { get; set; }
-        #endregion
+
+        #endregion Fields
 
         #region Constructor
+
         public BaseViewModel()
         {
-            resourceManager = new ResourceManager("Client.Properties.Resources", 
+            resourceManager = new ResourceManager("Client.Properties.Resources",
                 Assembly.GetExecutingAssembly());
         }
-        #endregion
+
+        #endregion Constructor
 
         #region PropertyChanged
 

@@ -90,7 +90,6 @@ namespace Client.Factory
             return (ServerStockService.PlaceOrderData)_objContainer.Resolve(typeof(ServerStockService.PlaceOrderData), MethodBase.GetCurrentMethod().Name);
         }
 
-
         public MarketOrderData CreateMarketOrderBookData()
         {
             if (!_objContainer.IsRegistered(typeof(MarketOrderData), MethodBase.GetCurrentMethod().Name))

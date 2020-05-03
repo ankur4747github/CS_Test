@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    internal class Program
+    public class Program
     {
         private static void Main(string[] args)
         {
@@ -16,9 +16,7 @@ namespace Server
             Console.ReadLine();
         }
 
-        
-
-        private static void HostStockService()
+        public static void HostStockService()
         {
             try
             {

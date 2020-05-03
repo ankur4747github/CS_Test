@@ -254,10 +254,10 @@ namespace Client.ServerStockService {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.Dictionary<double, System.Collections.Generic.Queue<Client.ServerStockService.PlaceOrderData>> BuyPendingOrdersField;
+        private Client.ServerStockService.PlaceOrderData[] BuyPendingOrdersField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.Dictionary<double, System.Collections.Generic.Queue<Client.ServerStockService.PlaceOrderData>> SellPendingOrdersField;
+        private Client.ServerStockService.PlaceOrderData[] SellPendingOrdersField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -270,7 +270,7 @@ namespace Client.ServerStockService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.Dictionary<double, System.Collections.Generic.Queue<Client.ServerStockService.PlaceOrderData>> BuyPendingOrders {
+        public Client.ServerStockService.PlaceOrderData[] BuyPendingOrders {
             get {
                 return this.BuyPendingOrdersField;
             }
@@ -283,7 +283,7 @@ namespace Client.ServerStockService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.Dictionary<double, System.Collections.Generic.Queue<Client.ServerStockService.PlaceOrderData>> SellPendingOrders {
+        public Client.ServerStockService.PlaceOrderData[] SellPendingOrders {
             get {
                 return this.SellPendingOrdersField;
             }
@@ -315,10 +315,10 @@ namespace Client.ServerStockService {
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IStockService/RegisterClient")]
         System.Threading.Tasks.Task RegisterClientAsync(int clientId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStockService/PlaceOrder", ReplyAction="http://tempuri.org/IStockService/PlaceOrderResponse")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IStockService/PlaceOrder")]
         void PlaceOrder(Client.ServerStockService.PlaceOrderData data);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStockService/PlaceOrder", ReplyAction="http://tempuri.org/IStockService/PlaceOrderResponse")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IStockService/PlaceOrder")]
         System.Threading.Tasks.Task PlaceOrderAsync(Client.ServerStockService.PlaceOrderData data);
     }
     

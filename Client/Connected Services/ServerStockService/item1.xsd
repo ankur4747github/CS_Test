@@ -15,11 +15,6 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="PlaceOrderResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
   <xs:element name="BroadcastPriceToClient">
     <xs:complexType>
       <xs:sequence>

@@ -11,11 +11,11 @@ namespace Server.Services.Stock
     {
         #region Fields
 
-        private volatile bool _alreadyRunning;
+        private volatile bool _alreadyRunning = false;
 
-        private ConcurrentQueue<PlaceOrderData> _unprocessed;
-        private Dictionary<double, Queue<PlaceOrderData>> _buyPendinfOrders { get; set; }
-        private Dictionary<double, Queue<PlaceOrderData>> _sellPendinfOrders { get; set; }
+        private ConcurrentQueue<PlaceOrderData> _unprocessed { get; set; }
+        private List<PlaceOrderData> _buyPendingOrders { get; set; }
+        private List<PlaceOrderData> _sellPendingOrders { get; set; }
         private List<TradeOrderData> _tradeOrderData { get; set; }
 
         #endregion Fields
@@ -25,8 +25,8 @@ namespace Server.Services.Stock
         public Order()
         {
             _unprocessed = new ConcurrentQueue<PlaceOrderData>();
-            _buyPendinfOrders = new Dictionary<double, Queue<PlaceOrderData>>();
-            _sellPendinfOrders = new Dictionary<double, Queue<PlaceOrderData>>();
+            _buyPendingOrders = new List<PlaceOrderData>();
+            _sellPendingOrders = new List<PlaceOrderData>();
             _tradeOrderData = new List<TradeOrderData>();
         }
 
@@ -62,7 +62,20 @@ namespace Server.Services.Stock
                 ObjFactory.Instance.CreateRegisterClients().GetClients());
         }
 
+        public MarketOrderBookData GetOrderData()
+        {
+            var marketOrderBook = ObjFactory.Instance.CreateMarketOrderBookData();
+            marketOrderBook.BuyPendingOrders = _buyPendingOrders;
+            marketOrderBook.SellPendingOrders = _sellPendingOrders;
+            return marketOrderBook;
+        }
+
         #endregion MarketOrderBook
+
+        public List<TradeOrderData> GetTradeListOrderData()
+        {
+            return _tradeOrderData;
+        }
 
         #endregion Public Methods
 
@@ -103,168 +116,110 @@ namespace Server.Services.Stock
         {
             if (data.IsBuy)
             {
-                if (_sellPendinfOrders.Count > 0)
+                if (_sellPendingOrders.Count > 0)
                 {
                     MatchBuyOrder(data);
                 }
                 else
                 {
-                    AddNewDataInTheBuyQueue(data);
+                    AddNewDataInTheBuyList(data);
                 }
             }
             else
             {
-                if (_buyPendinfOrders.Count > 0)
+                if (_buyPendingOrders.Count > 0)
                 {
                     MatchSellOrder(data);
                 }
                 else
                 {
-                    AddNewDataInTheSellQueue(data);
+                    AddNewDataInTheSellList(data);
                 }
             }
             UpdateMarketOrderBook();
         }
 
-        private void AddNewDataInTheBuyQueue(PlaceOrderData data)
+        private void AddNewDataInTheBuyList(PlaceOrderData data)
         {
-            if (!_buyPendinfOrders.ContainsKey(data.Price))
-            {
-                Queue<PlaceOrderData> placeOrderData = new Queue<PlaceOrderData>();
-                placeOrderData.Enqueue(data);
-                _buyPendinfOrders.Add(data.Price, placeOrderData);
-            }
-            else
-            {
-                Queue<PlaceOrderData> placeOrderData = _buyPendinfOrders[data.Price];
-                placeOrderData.Enqueue(data);
-            }
+            _buyPendingOrders.Add(data);
         }
 
-        private void AddNewDataInTheSellQueue(PlaceOrderData data)
+        private void AddNewDataInTheSellList(PlaceOrderData data)
         {
-            if (!_sellPendinfOrders.ContainsKey(data.Price))
-            {
-                Queue<PlaceOrderData> placeOrderData = new Queue<PlaceOrderData>();
-                placeOrderData.Enqueue(data);
-                _sellPendinfOrders.Add(data.Price, placeOrderData);
-            }
-            else
-            {
-                Queue<PlaceOrderData> placeOrderData = _sellPendinfOrders[data.Price];
-                placeOrderData.Enqueue(data);
-            }
+            _sellPendingOrders.Add(data);
         }
 
         private void MatchSellOrder(PlaceOrderData data)
         {
-            var keyList = _buyPendinfOrders.Where(x => x.Key >= data.Price)
-                                        .Select(x => x.Key)
-                                        .ToList();
-            foreach (var key in keyList)
+            var list = _buyPendingOrders.Where(x => x.Price >= data.Price).ToList();
+            foreach (var oldData in list)
             {
-                var value = _buyPendinfOrders[key];
-                ExecuteSellOrder(data, value, key);
-                if(value.Count == 0)
-                {
-                    _buyPendinfOrders.Remove(key);
-                }
+                ExecuteSellOrder(data, oldData);
                 if (data.Quantity == 0)
                 {
                     break;
                 }
             }
+
+            _buyPendingOrders.RemoveAll(x => x.Quantity == 0);
             if (data.Quantity > 0)
             {
-                AddNewDataInTheSellQueue(data);
+                AddNewDataInTheSellList(data);
             }
         }
 
         private void MatchBuyOrder(PlaceOrderData data)
         {
-            var keyList = _sellPendinfOrders.Where(x => x.Key >= data.Price)
-                                            .Select(x => x.Key)
-                                            .ToList();
-            foreach (var key in keyList)
+            var list = _sellPendingOrders.Where(x => x.Price <= data.Price).ToList();
+            foreach (var oldData in list)
             {
-                var value = _sellPendinfOrders[key];
-                ExecuteBuyOrder(data, value, key);
-                if (value.Count == 0)
-                {
-                    _sellPendinfOrders.Remove(key);
-                }
+                ExecuteBuyOrder(data, oldData);
                 if (data.Quantity == 0)
                 {
                     break;
                 }
             }
+
+            _sellPendingOrders.RemoveAll(x => x.Quantity == 0);
             if (data.Quantity > 0)
             {
-                AddNewDataInTheBuyQueue(data);
+                AddNewDataInTheBuyList(data);
             }
         }
 
-        private void ExecuteSellOrder(PlaceOrderData data, Queue<PlaceOrderData> value, double key)
+        private void ExecuteSellOrder(PlaceOrderData data, PlaceOrderData oldOrderData)
         {
-            if (value.Count > 0)
+            if (data.Quantity < oldOrderData.Quantity)
             {
-                var oldOrderData = value.Peek();
-                if (data.Quantity < oldOrderData.Quantity)
-                {
-                    int tradeQuantity = data.Quantity;
-                    oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
-                    data.Quantity = 0;
-                    Task.Run(() => UpdateTrade(oldOrderData.ClientId, data.ClientId, tradeQuantity, oldOrderData.Price));
-                }
-                else
-                {
-                    int tradeQuantity = oldOrderData.Quantity;
-                    oldOrderData.Quantity = 0;
-                    data.Quantity = data.Quantity - tradeQuantity;
-                    Task.Run(() => UpdateTrade(oldOrderData.ClientId, data.ClientId, tradeQuantity, oldOrderData.Price));
-                    value.Dequeue();
-
-                    if (data.Quantity > 0)
-                    {
-                        ExecuteSellOrder(data, value, key);
-                    }
-                }
+                int tradeQuantity = data.Quantity;
+                oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
+                data.Quantity = 0;
+                Task.Run(() => UpdateTrade(oldOrderData.ClientId, data.ClientId, tradeQuantity, oldOrderData.Price));
             }
             else
             {
-                _buyPendinfOrders.Remove(key);
+                int tradeQuantity = oldOrderData.Quantity;
+                oldOrderData.Quantity = 0;
+                data.Quantity = data.Quantity - tradeQuantity;
+                Task.Run(() => UpdateTrade(oldOrderData.ClientId, data.ClientId, tradeQuantity, oldOrderData.Price));
             }
         }
 
-        private void ExecuteBuyOrder(PlaceOrderData data, Queue<PlaceOrderData> value, double key)
+        private void ExecuteBuyOrder(PlaceOrderData data, PlaceOrderData oldOrderData)
         {
-            if (value.Count > 0)
+            if (data.Quantity < oldOrderData.Quantity)
             {
-                var oldOrderData = value.Peek();
-                if (data.Quantity < oldOrderData.Quantity)
-                {
-                    int tradeQuantity = oldOrderData.Quantity;
-                    oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
-                    data.Quantity = 0;
-                    Task.Run(() => UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price));
-                }
-                else
-                {
-                    int tradeQuantity = data.Quantity;
-                    oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
-                    data.Quantity = 0;
-                    Task.Run(() => UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price));
-
-                    value.Dequeue();
-                    if (data.Quantity > 0)
-                    {
-                        ExecuteSellOrder(data, value, key);
-                    }
-                }
+                int tradeQuantity = oldOrderData.Quantity;
+                oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
+                data.Quantity = 0;
+                Task.Run(() => UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price));
             }
             else
             {
-                _sellPendinfOrders.Remove(key);
+                int tradeQuantity = data.Quantity;
+                oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
+                data.Quantity = 0;
+                Task.Run(() => UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price));
             }
         }
 
@@ -293,13 +248,7 @@ namespace Server.Services.Stock
 
         #region MarketOrderBook
 
-        private MarketOrderBookData GetOrderData()
-        {
-            var marketOrderBook = ObjFactory.Instance.CreateMarketOrderBookData();
-            marketOrderBook.BuyPendingOrders = _buyPendinfOrders;
-            marketOrderBook.SellPendingOrders = _sellPendinfOrders;
-            return marketOrderBook;
-        }
+        
 
         private void UpdateMarketOrderBook()
         {

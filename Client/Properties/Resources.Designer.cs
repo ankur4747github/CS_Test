@@ -70,6 +70,15 @@ namespace Client.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Client disconnected from server.
+        /// </summary>
+        public static string ClientDisconnected {
+            get {
+                return ResourceManager.GetString("ClientDisconnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Client ID:- .
         /// </summary>
         public static string ClientId {
@@ -147,6 +156,15 @@ namespace Client.Properties {
         public static string Ok_Content {
             get {
                 return ResourceManager.GetString("Ok.Content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place order failed - Server disconnected.
+        /// </summary>
+        public static string PlaceOrderFailed {
+            get {
+                return ResourceManager.GetString("PlaceOrderFailed", resourceCulture);
             }
         }
         

@@ -101,7 +101,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Constants\Constant.cs" />
     <Compile Include="Constants\MessengerToken.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
@@ -144,12 +143,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\ServerStockService\item2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\ServerStockService\item3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\ServerStockService\item31.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\ServerStockService\StockService.wsdl" />

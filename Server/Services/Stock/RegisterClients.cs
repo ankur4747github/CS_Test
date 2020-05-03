@@ -7,19 +7,29 @@ namespace Server.StockServices
 {
     public class RegisterClients : IRegisterClients
     {
+        #region Fields
+
         private Dictionary<int, IBroadcastorCallBack> _clients { get; set; }
+
+        #endregion Fields
+
+        #region Constructor
 
         public RegisterClients()
         {
             _clients = new Dictionary<int, IBroadcastorCallBack>();
         }
 
+        #endregion Constructor
+
+        #region Public Methods
+
         public void RegisterClient(int clientId)
         {
             if (clientId > 0)
             {
                 IBroadcastorCallBack callback =
-                    OperationContext.Current.GetCallbackChannel<IBroadcastorCallBack>();
+                    OperationContext.Current?.GetCallbackChannel<IBroadcastorCallBack>();
 
                 if (_clients.Keys.Contains(clientId))
                 {
@@ -51,5 +61,7 @@ namespace Server.StockServices
         {
             return _clients;
         }
+
+        #endregion Public Methods
     }
 }

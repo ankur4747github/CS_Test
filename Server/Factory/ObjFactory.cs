@@ -87,6 +87,15 @@ namespace Server.Factory
             return (MarketOrderBookData)_objContainer.Resolve(typeof(MarketOrderBookData), MethodBase.GetCurrentMethod().Name);
         }
 
+        public PlaceOrderData CreatePlaceOrderData()
+        {
+            if (!_objContainer.IsRegistered(typeof(PlaceOrderData), MethodBase.GetCurrentMethod().Name))
+            {
+                _objContainer.RegisterInstance(typeof(PlaceOrderData), MethodBase.GetCurrentMethod().Name);
+            }
+            return (PlaceOrderData)_objContainer.Resolve(typeof(PlaceOrderData), MethodBase.GetCurrentMethod().Name);
+        }
+
         #endregion Data
 
         #region Services
@@ -117,6 +126,24 @@ namespace Server.Factory
             }
             return (Order)_objContainer.Resolve(typeof(Order), MethodBase.GetCurrentMethod().Name);
         }
+
+        public IStockService CreateStockService()
+        {
+            if (!_objContainer.IsRegistered(typeof(StockService), MethodBase.GetCurrentMethod().Name))
+            {
+                _objContainer.RegisterSingleton(typeof(StockService), MethodBase.GetCurrentMethod().Name);
+            }
+            return (StockService)_objContainer.Resolve(typeof(StockService), MethodBase.GetCurrentMethod().Name);
+        }
+
         #endregion Services
+
+        #region CleanUp
+        public void Cleanup()
+        {
+            _objContainer.Dispose();
+            _objContainer = new UnityContainer();
+        }
+        #endregion
     }
 }

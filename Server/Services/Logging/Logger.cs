@@ -6,8 +6,9 @@ namespace Services.Logging
 {
     public class Logger : ILog
     {
-        //Logs Available in %appdata% folder 
+        //Logs Available in %appdata% folder
         //ex:- C:\Users\ankur\AppData\Roaming\Server
+
         #region Fields
 
         private static ILogger log = null;

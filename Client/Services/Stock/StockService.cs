@@ -40,12 +40,22 @@ namespace Client.Services.Stock
             return false;
         }
 
-        public void PlaceOrder(ServerStockService.PlaceOrderData data)
+        public bool PlaceOrder(ServerStockService.PlaceOrderData data)
         {
-            if (_client != null)
+            try
             {
-                _client.PlaceOrder(data);
+                if (_client != null)
+                {
+                    _client.PlaceOrder(data);
+                    return true;
+                }
             }
+            catch (Exception ex)
+            {
+                ObjFactory.Instance.CreateLogger()
+                    .Log("Register = " + ex.Message, GetType().Name);
+            }
+            return false;
         }
 
         #endregion Public Methods

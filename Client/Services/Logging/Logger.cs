@@ -6,8 +6,8 @@ namespace Services.Logging
 {
     public class Logger : ILog
     {
-        //Logs Available in %appdata% folder 
-        //ex:- C:\Users\ankur\AppData\Roaming\Server
+        //Logs Available in %appdata% folder
+        //ex:- C:\Users\ankur\AppData\Roaming\Client
 
         #region Fields
 
