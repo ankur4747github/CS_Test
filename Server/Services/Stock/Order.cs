@@ -1,6 +1,5 @@
 ﻿using Server.Factory;
 using Server.Model;
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,6 +51,18 @@ namespace Server.Services.Stock
                 }
             }
         }
+
+        #region MarketOrderBook
+
+        public void UpdateMarketOrderBook(int clientID)
+        {
+            var marketOrderBook = GetOrderData();
+
+            ObjFactory.Instance.CreateBroadCastData().BroadCastMarketOrderBookData(marketOrderBook,
+                ObjFactory.Instance.CreateRegisterClients().GetClients());
+        }
+
+        #endregion MarketOrderBook
 
         #endregion Public Methods
 
@@ -190,21 +201,21 @@ namespace Server.Services.Stock
             if (value.Count > 0)
             {
                 var oldOrderData = value.Peek();
-                if (data.Quantity > oldOrderData.Quantity)
+                if (data.Quantity < oldOrderData.Quantity)
                 {
-                    int tradeQuantity = oldOrderData.Quantity;
+                    int tradeQuantity = data.Quantity;
                     oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
-                    data.Quantity = data.Quantity - tradeQuantity;
+                    data.Quantity = 0;
                     Task.Run(() => UpdateTrade(oldOrderData.ClientId, data.ClientId, tradeQuantity, oldOrderData.Price));
                 }
                 else
                 {
-                    int tradeQuantity = data.Quantity;
+                    int tradeQuantity = oldOrderData.Quantity;
                     oldOrderData.Quantity = 0;
                     data.Quantity = data.Quantity - tradeQuantity;
                     Task.Run(() => UpdateTrade(oldOrderData.ClientId, data.ClientId, tradeQuantity, oldOrderData.Price));
-
                     value.Dequeue();
+
                     if (data.Quantity > 0)
                     {
                         ExecuteSellOrder(data, value, key);
@@ -225,14 +236,17 @@ namespace Server.Services.Stock
                 if (data.Quantity < oldOrderData.Quantity)
                 {
                     int tradeQuantity = oldOrderData.Quantity;
-                    Task.Run(() => UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price));
                     oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
+                    data.Quantity = 0;
+                    Task.Run(() => UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price));
                 }
                 else
                 {
                     int tradeQuantity = data.Quantity;
+                    oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
+                    data.Quantity = 0;
                     Task.Run(() => UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price));
-                    oldOrderData.Quantity = 0;
+
                     value.Dequeue();
                     if (data.Quantity > 0)
                     {
@@ -261,18 +275,27 @@ namespace Server.Services.Stock
 
             ObjFactory.Instance.CreateBroadCastData().BroadCastTradeData(tradeData,
                 ObjFactory.Instance.CreateRegisterClients().GetClients());
+
+            ObjFactory.Instance.CreateLogger().Log(string.Format(
+                "BuyUserId {0} sellUserId {1} tradeQuantity {2} tradePrice {3}",
+                buyUserId, sellUserId, tradeQuantity, tradePrice), GetType().Name, false);
         }
 
         #endregion After Trade
 
         #region MarketOrderBook
 
-        private void UpdateMarketOrderBook()
+        private MarketOrderBookData GetOrderData()
         {
             var marketOrderBook = ObjFactory.Instance.CreateMarketOrderBookData();
             marketOrderBook.BuyPendingOrders = _buyPendinfOrders;
             marketOrderBook.SellPendingOrders = _sellPendinfOrders;
+            return marketOrderBook;
+        }
 
+        private void UpdateMarketOrderBook()
+        {
+            var marketOrderBook = GetOrderData();
             ObjFactory.Instance.CreateBroadCastData().BroadCastMarketOrderBookData(marketOrderBook,
                 ObjFactory.Instance.CreateRegisterClients().GetClients());
         }

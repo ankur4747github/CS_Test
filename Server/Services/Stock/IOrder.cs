@@ -10,5 +10,6 @@ namespace Server.Services.Stock
     public interface IOrder
     {
         void AddOrderIntoQueue(PlaceOrderData data);
+        void UpdateMarketOrderBook(int clientId);
     }
 }

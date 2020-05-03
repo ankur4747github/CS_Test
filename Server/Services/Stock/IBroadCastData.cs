@@ -1,9 +1,5 @@
 ﻿using Server.Model;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Server.StockServices
 {
@@ -12,10 +8,13 @@ namespace Server.StockServices
         void BroadCastStockPrice(StockData data,
             IReadOnlyDictionary<int, IBroadcastorCallBack> clients);
 
-        void BroadCastTradeData(TradeOrderData data, 
+        void BroadCastTradeData(TradeOrderData data,
             IReadOnlyDictionary<int, IBroadcastorCallBack> clients);
 
         void BroadCastMarketOrderBookData(MarketOrderBookData data,
             IReadOnlyDictionary<int, IBroadcastorCallBack> clients);
+
+        void BroadCastMarketOrderBookDataToSingleClient(MarketOrderBookData data,
+           IReadOnlyDictionary<int, IBroadcastorCallBack> clients, int clientId);
     }
 }

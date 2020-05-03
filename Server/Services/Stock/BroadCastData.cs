@@ -1,6 +1,5 @@
 ﻿using Server.Factory;
 using Server.Model;
-using System;
 using System.Collections.Generic;
 
 namespace Server.StockServices
@@ -66,6 +65,24 @@ namespace Server.StockServices
                     ObjFactory.Instance.CreateLogger()
                         .Log("BroadCastMarketOrderBookData =" + client, this.GetType().Name);
                 }
+            }
+        }
+
+        public void BroadCastMarketOrderBookDataToSingleClient(MarketOrderBookData data,
+            IReadOnlyDictionary<int, IBroadcastorCallBack> clients, int clientId)
+        {
+            try
+            {
+                var value = clients[clientId];
+                if (value != null)
+                {
+                    value.BroadCastMarketOrderBookData(data);
+                }
+            }
+            catch
+            {
+                ObjFactory.Instance.CreateLogger()
+                    .Log("BroadCastMarketOrderBookDataToSingleClient =" + clientId, this.GetType().Name);
             }
         }
 

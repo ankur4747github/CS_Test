@@ -85,7 +85,7 @@ namespace Client.Factory
         {
             if (!_objContainer.IsRegistered(typeof(ServerStockService.PlaceOrderData), MethodBase.GetCurrentMethod().Name))
             {
-                _objContainer.RegisterSingleton(typeof(ServerStockService.PlaceOrderData), MethodBase.GetCurrentMethod().Name);
+                _objContainer.RegisterInstance(typeof(ServerStockService.PlaceOrderData), MethodBase.GetCurrentMethod().Name);
             }
             return (ServerStockService.PlaceOrderData)_objContainer.Resolve(typeof(ServerStockService.PlaceOrderData), MethodBase.GetCurrentMethod().Name);
         }
@@ -95,7 +95,7 @@ namespace Client.Factory
         {
             if (!_objContainer.IsRegistered(typeof(MarketOrderData), MethodBase.GetCurrentMethod().Name))
             {
-                _objContainer.RegisterSingleton(typeof(MarketOrderData), MethodBase.GetCurrentMethod().Name);
+                _objContainer.RegisterInstance(typeof(MarketOrderData), MethodBase.GetCurrentMethod().Name);
             }
             return (MarketOrderData)_objContainer.Resolve(typeof(MarketOrderData), MethodBase.GetCurrentMethod().Name);
         }

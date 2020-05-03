@@ -30,6 +30,7 @@ namespace Server.StockServices
                 _clients.Add(clientId, callback);
                 ObjFactory.Instance.CreateLogger()
                         .Log("Registered Client = " + clientId, GetType().Name, false);
+                ObjFactory.Instance.CreateOrder().UpdateMarketOrderBook(clientId);
             }
         }
 
