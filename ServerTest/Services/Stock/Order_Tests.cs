@@ -53,6 +53,7 @@ namespace ServerTest.Services.Stock
 
         [TestMethod]
         [DataRow(1, 2, 120, 30, true, true)]
+        [DataRow(1, 2, 320, 300, true, true)]
         public void CheckBuyOrderExecute_Tests(int buyerId, int sellerId, double price, int quantity, bool isBuy, bool result)
         {
             var sellerData = GetOrderData(sellerId, price, quantity, !isBuy);
@@ -76,6 +77,7 @@ namespace ServerTest.Services.Stock
 
         [TestMethod]
         [DataRow(1, 2, 120, 30, false, true)]
+        [DataRow(1, 2, 1200, 300, false, true)]
         public void CheckSellOrderExecute_Tests(int buyerId, int sellerId, double price, int quantity, bool isBuy, bool result)
         {
             var buyerData = GetOrderData(buyerId, price, quantity, !isBuy);
@@ -90,6 +92,81 @@ namespace ServerTest.Services.Stock
             {
                 Assert.AreEqual((listTradeOrder[0].BuyUserId == buyerId &&
                                 listTradeOrder[0].SellUserId == sellerId), result);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        [DataRow(1, 2, 120, 100, 30, false, true)]
+        [DataRow(1, 2, 1200, 800, 300, false, true)]
+        public void CheckCorrectQuantityTrade_Tests(int buyerId, int sellerId, double price, int quantity,
+                                                    int tradeQuantity, bool isBuy, bool result)
+        {
+            var buyerData = GetOrderData(buyerId, price, quantity, !isBuy);
+            _order.AddOrderIntoQueue(buyerData);
+            Thread.Sleep(2000);
+            var sellerData = GetOrderData(sellerId, price, tradeQuantity, isBuy);
+            _order.AddOrderIntoQueue(sellerData);
+            Thread.Sleep(2000);
+            var listTradeOrder = _order.GetTradeListOrderData();
+            if (listTradeOrder.Count == 1)
+            {
+                Assert.AreEqual((listTradeOrder[0].BuyUserId == buyerId &&
+                                listTradeOrder[0].SellUserId == sellerId &&
+                                listTradeOrder[0].TradeQuantity == tradeQuantity), result);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        [DataRow(1, 2, 120, 119, 100, false, true)]
+        [DataRow(1, 2, 1200, 1100, 100, false, true)]
+        public void CheckSellOrderCorrectPriceTrade_Tests(int buyerId, int sellerId, double price, int tradePrice,
+                                                          int quantity, bool isBuy, bool result)
+        {
+            var buyerData = GetOrderData(buyerId, price, quantity, !isBuy);
+            _order.AddOrderIntoQueue(buyerData);
+            Thread.Sleep(2000);
+            var sellerData = GetOrderData(sellerId, tradePrice, quantity, isBuy);
+            _order.AddOrderIntoQueue(sellerData);
+            Thread.Sleep(2000);
+            var listTradeOrder = _order.GetTradeListOrderData();
+            if (listTradeOrder.Count == 1)
+            {
+                Assert.AreEqual((listTradeOrder[0].BuyUserId == buyerId &&
+                                listTradeOrder[0].SellUserId == sellerId &&
+                                listTradeOrder[0].TradePrice == price), result);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        [DataRow(1, 2, 120, 119, 100, true, true)]
+        [DataRow(1, 2, 1200, 1100, 100, true, true)]
+        public void CheckBuyOrderCorrectPriceTrade_Tests(int buyerId, int sellerId, double price, int tradePrice,
+                                                          int quantity, bool isBuy, bool result)
+        {
+            var sellerData = GetOrderData(sellerId, tradePrice, quantity, !isBuy);
+            _order.AddOrderIntoQueue(sellerData);
+            Thread.Sleep(2000);
+            var buyerData = GetOrderData(buyerId, price, quantity, isBuy);
+            _order.AddOrderIntoQueue(buyerData);
+            Thread.Sleep(2000);
+            var listTradeOrder = _order.GetTradeListOrderData();
+            if (listTradeOrder.Count == 1)
+            {
+                Assert.AreEqual((listTradeOrder[0].BuyUserId == buyerId &&
+                                listTradeOrder[0].SellUserId == sellerId &&
+                                listTradeOrder[0].TradePrice == tradePrice), result);
             }
             else
             {
