@@ -352,7 +352,7 @@ namespace Client.ViewModel
         {
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
-                TradeOrderDataList.Add(tradeOrderData);
+                TradeOrderDataList.Insert(0, tradeOrderData);
             });
         }
 
@@ -383,40 +383,55 @@ namespace Client.ViewModel
             {
                 MarketOrderDataList.Clear();
             });
-            List<double> sellKeyList = obj.SellPendingOrders.Select(x => x.Key).ToList();
-            sellKeyList.Sort();
+            UpdateSellOrderBook(obj);
+            UpdateBuyOrderBook(obj);
+        }
 
-            foreach (var key in sellKeyList)
-            {
-                var marketData = ObjFactory.Instance.CreateMarketOrderBookData();
-                marketData.Price = key;
-                marketData.MyBidQuantity = obj.SellPendingOrders[key]
-                                            .Where(x => x.ClientId == ClientId)
-                                            .Sum(x => x.Quantity);
-                marketData.MrktBidQuantity = obj.SellPendingOrders[key]
-                                            .Sum(x => x.Quantity);
-                DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                {
-                    MarketOrderDataList.Add(marketData);
-                });
-            }
-
+        private void UpdateBuyOrderBook(MarketOrderBookData obj)
+        {
             List<double> buyKeyList = obj.BuyPendingOrders.Select(x => x.Key).ToList();
-            buyKeyList.Sort();
-
-            foreach (var key in buyKeyList)
+            if (buyKeyList.Count > 0)
             {
-                var marketData = ObjFactory.Instance.CreateMarketOrderBookData();
-                marketData.Price = key;
-                marketData.MyAskQuantity = obj.BuyPendingOrders[key]
-                                            .Where(x => x.ClientId == ClientId)
-                                            .Sum(x => x.Quantity);
-                marketData.MrktAskQuantity = obj.BuyPendingOrders[key]
-                                            .Sum(x => x.Quantity);
-                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                buyKeyList = buyKeyList.OrderByDescending(x => x).ToList();
+
+                foreach (var key in buyKeyList)
                 {
-                    MarketOrderDataList.Add(marketData);
-                });
+                    var marketData = ObjFactory.Instance.CreateMarketOrderBookData();
+                    marketData.Price = key;
+                    marketData.MyAskQuantity = obj.BuyPendingOrders[key]
+                                                .Where(x => x.ClientId == ClientId)
+                                                .Sum(x => x.Quantity);
+                    marketData.MrktAskQuantity = obj.BuyPendingOrders[key]
+                                                .Sum(x => x.Quantity);
+                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    {
+                        MarketOrderDataList.Add(marketData);
+                    });
+                }
+            }
+        }
+
+        private void UpdateSellOrderBook(MarketOrderBookData obj)
+        {
+            List<double> sellKeyList = obj.SellPendingOrders.Select(x => x.Key).ToList();
+            if (sellKeyList.Count > 0)
+            {
+                sellKeyList = sellKeyList.OrderByDescending(x => x).ToList();
+
+                foreach (var key in sellKeyList)
+                {
+                    var marketData = ObjFactory.Instance.CreateMarketOrderBookData();
+                    marketData.Price = key;
+                    marketData.MyBidQuantity = obj.SellPendingOrders[key]
+                                                .Where(x => x.ClientId == ClientId)
+                                                .Sum(x => x.Quantity);
+                    marketData.MrktBidQuantity = obj.SellPendingOrders[key]
+                                                .Sum(x => x.Quantity);
+                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    {
+                        MarketOrderDataList.Add(marketData);
+                    });
+                }
             }
         }
 

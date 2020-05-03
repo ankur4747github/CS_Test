@@ -165,6 +165,10 @@ namespace Server.Services.Stock
             {
                 var value = _buyPendinfOrders[key];
                 ExecuteSellOrder(data, value, key);
+                if(value.Count == 0)
+                {
+                    _buyPendinfOrders.Remove(key);
+                }
                 if (data.Quantity == 0)
                 {
                     break;
@@ -185,6 +189,10 @@ namespace Server.Services.Stock
             {
                 var value = _sellPendinfOrders[key];
                 ExecuteBuyOrder(data, value, key);
+                if (value.Count == 0)
+                {
+                    _sellPendinfOrders.Remove(key);
+                }
                 if (data.Quantity == 0)
                 {
                     break;

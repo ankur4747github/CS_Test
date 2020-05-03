@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:Client"
         xmlns:p="clr-namespace:Client.Properties"
         mc:Ignorable="d"
-        Title="TradeWindow" Height="600" Width="950">
+        Title="TradeWindow" Width="1000">
     <Window.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BoolToVis" />
         <converter:InverseBooleanToVisibilityConverter x:Key="InverseBoolToVis" />
@@ -55,7 +55,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal"
                         Background="Black"
@@ -140,7 +140,6 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel>
                     <Grid Height="40"
-                          
                           HorizontalAlignment="Stretch"
                           Background="#255B89">
                         <TextBlock Text="{x:Static p:Resources.MarketTrade}"
@@ -152,6 +151,7 @@
                     </Grid>
                     <ListView Grid.Row="1"
                               HorizontalAlignment="Stretch"
+                              Height="400"
                               AlternationCount="2"
                               ItemsSource="{Binding Path=TradeOrderDataList, Mode=OneWay}">
                         <ListView.View>
@@ -173,9 +173,9 @@
                     </ListView>
                 </StackPanel>
 
-                <StackPanel Grid.Column="1">
+                <StackPanel Grid.Column="1"
+                            Margin="15,0,0,0">
                     <Grid Height="40"
-                          Margin="5,0,0,0"
                           HorizontalAlignment="Stretch"
                           Background="#255B89">
                         <TextBlock Text="{x:Static p:Resources.MarketOrderBook}"
@@ -185,9 +185,9 @@
                                    Foreground="White">
                         </TextBlock>
                     </Grid>
-                    <ListView Grid.Row="1"
-                              HorizontalAlignment="Stretch"
+                    <ListView HorizontalAlignment="Stretch"
                               AlternationCount="2"
+                              Height="400"
                               ItemsSource="{Binding Path=MarketOrderDataList, Mode=OneWay}">
                         <ListView.View>
                             <GridView>
