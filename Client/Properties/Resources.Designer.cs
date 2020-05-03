@@ -70,6 +70,15 @@ namespace Client.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Client ID:- .
+        /// </summary>
+        public static string ClientId {
+            get {
+                return ResourceManager.GetString("ClientId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connecting to server, please wait....
         /// </summary>
         public static string ConnecingToServer {
@@ -111,6 +120,24 @@ namespace Client.Properties {
         public static string EnterQuantity {
             get {
                 return ResourceManager.GetString("EnterQuantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Market Order Book.
+        /// </summary>
+        public static string MarketOrderBook {
+            get {
+                return ResourceManager.GetString("MarketOrderBook", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Market Trade.
+        /// </summary>
+        public static string MarketTrade {
+            get {
+                return ResourceManager.GetString("MarketTrade", resourceCulture);
             }
         }
         

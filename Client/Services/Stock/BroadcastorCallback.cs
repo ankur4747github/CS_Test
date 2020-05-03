@@ -1,27 +1,30 @@
 ﻿using Client.Constants;
+using Client.ServerStockService;
 using GalaSoft.MvvmLight.Messaging;
 using System.Threading.Tasks;
 
 namespace Client.Services.Stock
 {
-    public class BroadcastorCallback : ServerStockService.IStockServiceCallback
+    public class BroadcastorCallback : IStockServiceCallback
     {
+       
         #region Public Methods
 
-        public void BroadcastPriceToClient(ServerStockService.StockData eventData)
+        public void BroadcastPriceToClient(StockData eventData)
         {
-            Task.Run(() => BroadcastPriceToUI(eventData));
+            Task.Run(() => Messenger.Default.Send(eventData, MessengerToken.BROADCASTSTOCKPRICE));
         }
 
+        public void BroadcastTradeDataToClient(TradeOrderData eventData)
+        {
+            Task.Run(() => Messenger.Default.Send(eventData, MessengerToken.BROADCASTTRADEDATA));
+        }
+        public void BroadCastMarketOrderBookData(MarketOrderBookData eventData)
+        {
+            Task.Run(() => Messenger.Default.Send(eventData, MessengerToken.BROADCASTMARKETORDERBOOK));
+        }
         #endregion Public Methods
 
-        #region Private Methods
 
-        private void BroadcastPriceToUI(ServerStockService.StockData eventData)
-        {
-            Messenger.Default.Send(eventData, MessengerToken.BROADCASTSTOCKPRICE);
-        }
-
-        #endregion Private Methods
     }
 }

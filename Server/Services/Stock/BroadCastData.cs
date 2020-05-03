@@ -1,5 +1,6 @@
 ﻿using Server.Factory;
 using Server.Model;
+using System;
 using System.Collections.Generic;
 
 namespace Server.StockServices
@@ -24,17 +25,55 @@ namespace Server.StockServices
                 {
                     inactiveClients.Add(client.Key);
                     ObjFactory.Instance.CreateLogger()
-                        .Log("Error in BroadCast Added in inactiveList ClientId =" + client, this.GetType().Name, false);
+                        .Log("Error in BroadCast Added in inactiveList ClientId =" + client, this.GetType().Name);
                 }
             }
             RemoveInactiveClients(inactiveClients);
+        }
+
+        public void BroadCastTradeData(TradeOrderData data,
+            IReadOnlyDictionary<int, IBroadcastorCallBack> clients)
+        {
+            foreach (var client in clients)
+            {
+                //BroadCast Trade Update to all Client
+                //if(data.BuyUserId == client.Key || data.SellUserId == client.Key)
+                {
+                    try
+                    {
+                        client.Value.BroadcastTradeDataToClient(data);
+                    }
+                    catch
+                    {
+                        ObjFactory.Instance.CreateLogger()
+                            .Log("BroadCastTradeData =" + client, this.GetType().Name);
+                    }
+                }
+            }
+        }
+
+        public void BroadCastMarketOrderBookData(MarketOrderBookData data,
+            IReadOnlyDictionary<int, IBroadcastorCallBack> clients)
+        {
+            foreach (var client in clients)
+            {
+                try
+                {
+                    client.Value.BroadCastMarketOrderBookData(data);
+                }
+                catch
+                {
+                    ObjFactory.Instance.CreateLogger()
+                        .Log("BroadCastMarketOrderBookData =" + client, this.GetType().Name);
+                }
+            }
         }
 
         #endregion Public Methods
 
         #region Private Methods
 
-        private static void RemoveInactiveClients(List<int> inactiveClients)
+        private void RemoveInactiveClients(List<int> inactiveClients)
         {
             if (inactiveClients.Count > 0)
             {

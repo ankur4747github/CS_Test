@@ -1,5 +1,6 @@
 ﻿using Server.Factory;
 using Server.Model;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace Server.Services.Stock
         private ConcurrentQueue<PlaceOrderData> _unprocessed;
         private Dictionary<double, Queue<PlaceOrderData>> _buyPendinfOrders { get; set; }
         private Dictionary<double, Queue<PlaceOrderData>> _sellPendinfOrders { get; set; }
+        private List<TradeOrderData> _tradeOrderData { get; set; }
 
         #endregion Fields
 
@@ -26,6 +28,7 @@ namespace Server.Services.Stock
             _unprocessed = new ConcurrentQueue<PlaceOrderData>();
             _buyPendinfOrders = new Dictionary<double, Queue<PlaceOrderData>>();
             _sellPendinfOrders = new Dictionary<double, Queue<PlaceOrderData>>();
+            _tradeOrderData = new List<TradeOrderData>();
         }
 
         #endregion Constructor
@@ -109,6 +112,7 @@ namespace Server.Services.Stock
                     AddNewDataInTheSellQueue(data);
                 }
             }
+            UpdateMarketOrderBook();
         }
 
         private void AddNewDataInTheBuyQueue(PlaceOrderData data)
@@ -191,14 +195,15 @@ namespace Server.Services.Stock
                     int tradeQuantity = oldOrderData.Quantity;
                     oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
                     data.Quantity = data.Quantity - tradeQuantity;
-                    UpdateTrade(oldOrderData.ClientId, data.ClientId, tradeQuantity, oldOrderData.Price);
+                    Task.Run(() => UpdateTrade(oldOrderData.ClientId, data.ClientId, tradeQuantity, oldOrderData.Price));
                 }
                 else
                 {
                     int tradeQuantity = data.Quantity;
                     oldOrderData.Quantity = 0;
                     data.Quantity = data.Quantity - tradeQuantity;
-                    UpdateTrade(oldOrderData.ClientId, data.ClientId, tradeQuantity, oldOrderData.Price);
+                    Task.Run(() => UpdateTrade(oldOrderData.ClientId, data.ClientId, tradeQuantity, oldOrderData.Price));
+
                     value.Dequeue();
                     if (data.Quantity > 0)
                     {
@@ -217,16 +222,16 @@ namespace Server.Services.Stock
             if (value.Count > 0)
             {
                 var oldOrderData = value.Peek();
-                if (data.Quantity > oldOrderData.Quantity)
+                if (data.Quantity < oldOrderData.Quantity)
                 {
                     int tradeQuantity = oldOrderData.Quantity;
-                    UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price);
+                    Task.Run(() => UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price));
                     oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
                 }
                 else
                 {
                     int tradeQuantity = data.Quantity;
-                    UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price);
+                    Task.Run(() => UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price));
                     oldOrderData.Quantity = 0;
                     value.Dequeue();
                     if (data.Quantity > 0)
@@ -245,11 +250,34 @@ namespace Server.Services.Stock
 
         #region After Trade
 
-        private void UpdateTrade(int buyUserId, int sellUserId, int tradeQuantity, double price)
+        private void UpdateTrade(int buyUserId, int sellUserId, int tradeQuantity, double tradePrice)
         {
+            var tradeData = ObjFactory.Instance.CreateTradeOrderData();
+            tradeData.BuyUserId = buyUserId;
+            tradeData.SellUserId = sellUserId;
+            tradeData.TradeQuantity = tradeQuantity;
+            tradeData.TradePrice = tradePrice;
+            _tradeOrderData.Add(tradeData);
+
+            ObjFactory.Instance.CreateBroadCastData().BroadCastTradeData(tradeData,
+                ObjFactory.Instance.CreateRegisterClients().GetClients());
         }
 
         #endregion After Trade
+
+        #region MarketOrderBook
+
+        private void UpdateMarketOrderBook()
+        {
+            var marketOrderBook = ObjFactory.Instance.CreateMarketOrderBookData();
+            marketOrderBook.BuyPendingOrders = _buyPendinfOrders;
+            marketOrderBook.SellPendingOrders = _sellPendinfOrders;
+
+            ObjFactory.Instance.CreateBroadCastData().BroadCastMarketOrderBookData(marketOrderBook,
+                ObjFactory.Instance.CreateRegisterClients().GetClients());
+        }
+
+        #endregion MarketOrderBook
 
         #endregion Private Method
     }

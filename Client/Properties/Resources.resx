@@ -120,6 +120,9 @@
   <data name="Buy" xml:space="preserve">
     <value>Buy</value>
   </data>
+  <data name="ClientId" xml:space="preserve">
+    <value>Client ID:- </value>
+  </data>
   <data name="ConnecingToServer" xml:space="preserve">
     <value>Connecting to server, please wait...</value>
   </data>
@@ -134,6 +137,12 @@
   </data>
   <data name="EnterQuantity" xml:space="preserve">
     <value>Enter Quantity</value>
+  </data>
+  <data name="MarketOrderBook" xml:space="preserve">
+    <value>Market Order Book</value>
+  </data>
+  <data name="MarketTrade" xml:space="preserve">
+    <value>Market Trade</value>
   </data>
   <data name="Ok.Content" xml:space="preserve">
     <value>Ok</value>

@@ -11,5 +11,11 @@ namespace Server.StockServices
     {
         void BroadCastStockPrice(StockData data,
             IReadOnlyDictionary<int, IBroadcastorCallBack> clients);
+
+        void BroadCastTradeData(TradeOrderData data, 
+            IReadOnlyDictionary<int, IBroadcastorCallBack> clients);
+
+        void BroadCastMarketOrderBookData(MarketOrderBookData data,
+            IReadOnlyDictionary<int, IBroadcastorCallBack> clients);
     }
 }

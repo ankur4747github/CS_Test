@@ -106,6 +106,7 @@
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Factory\ObjFactory.cs" />
+    <Compile Include="Model\MarketOrderData.cs" />
     <Compile Include="Services\Logging\ILog.cs" />
     <Compile Include="Services\Logging\Logger.cs" />
     <Compile Include="Services\Stock\IStockService.cs" />
@@ -145,6 +146,12 @@
     <None Include="Connected Services\ServerStockService\item2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\ServerStockService\item3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ServerStockService\item31.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\ServerStockService\StockService.wsdl" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -158,9 +165,7 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Messenger\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\ServerStockService\" />
   </ItemGroup>

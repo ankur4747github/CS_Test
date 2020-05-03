@@ -1,18 +1,21 @@
 ﻿using Client.Command;
 using Client.Constants;
 using Client.Factory;
+using Client.Model;
 using Client.ServerStockService;
 using GalaSoft.MvvmLight.Messaging;
-using Server.Constants;
+using GalaSoft.MvvmLight.Threading;
 using System;
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
 namespace Client.ViewModel
 {
-    public class TradeWindowViewModel : BaseViewModel
+    public class TradeWindowViewModel : BaseViewModel, IDisposable
     {
         #region Button Command
 
@@ -188,6 +191,44 @@ namespace Client.ViewModel
 
         #endregion Price
 
+        #region TradeOrderDataList
+
+        public ObservableCollection<TradeOrderData> TradeOrderDataList
+        {
+            get { return _tradeOrderDataList; }
+            set
+            {
+                if (value == _tradeOrderDataList)
+                    return;
+
+                _tradeOrderDataList = value;
+                OnPropertyChangedAsync(nameof(TradeOrderDataList));
+            }
+        }
+
+        private ObservableCollection<TradeOrderData> _tradeOrderDataList { get; set; }
+
+        #endregion TradeOrderDataList
+
+        #region MarketOrderDataList
+
+        public ObservableCollection<MarketOrderData> MarketOrderDataList
+        {
+            get { return _marketOrderDataList; }
+            set
+            {
+                if (value == _marketOrderDataList)
+                    return;
+
+                _marketOrderDataList = value;
+                OnPropertyChangedAsync(nameof(MarketOrderDataList));
+            }
+        }
+
+        private ObservableCollection<MarketOrderData> _marketOrderDataList { get; set; }
+
+        #endregion MarketOrderDataList
+
         #endregion INotifyPropertyChange Member
 
         #region Constructor
@@ -196,6 +237,8 @@ namespace Client.ViewModel
         {
             InitCommand();
             InitMessenger();
+            TradeOrderDataList = new ObservableCollection<TradeOrderData>();
+            MarketOrderDataList = new ObservableCollection<MarketOrderData>();
         }
 
         #endregion Constructor
@@ -221,6 +264,16 @@ namespace Client.ViewModel
                   MessengerToken.BROADCASTSTOCKPRICE, UpdatePrice);
             Messenger.Default.Register<StockData>(this,
                 MessengerToken.BROADCASTSTOCKPRICE, UpdatePrice);
+
+            Messenger.Default.Unregister<TradeOrderData>(this,
+                  MessengerToken.BROADCASTTRADEDATA, UpdateTrade);
+            Messenger.Default.Register<TradeOrderData>(this,
+                MessengerToken.BROADCASTTRADEDATA, UpdateTrade);
+
+            Messenger.Default.Unregister<MarketOrderBookData>(this,
+                  MessengerToken.BROADCASTMARKETORDERBOOK, UpdateOrderBook);
+            Messenger.Default.Register<MarketOrderBookData>(this,
+                MessengerToken.BROADCASTMARKETORDERBOOK, UpdateOrderBook);
         }
 
         #endregion InitMessenger
@@ -295,6 +348,14 @@ namespace Client.ViewModel
             Price = obj.StockPrice;
         }
 
+        private void UpdateTrade(TradeOrderData tradeOrderData)
+        {
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+            {
+                TradeOrderDataList.Add(tradeOrderData);
+            });
+        }
+
         #endregion Update Data
 
         #region Validation
@@ -314,6 +375,53 @@ namespace Client.ViewModel
 
         #endregion Validation
 
+        #region OrderBook
+
+        private void UpdateOrderBook(MarketOrderBookData obj)
+        {
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+            {
+                MarketOrderDataList.Clear();
+            });
+            List<double> sellKeyList = obj.SellPendingOrders.Select(x => x.Key).ToList();
+            sellKeyList.Sort();
+
+            foreach (var key in sellKeyList)
+            {
+                var marketData = ObjFactory.Instance.CreateMarketOrderBookData();
+                marketData.Price = key;
+                marketData.MyBidQuantity = obj.SellPendingOrders[key]
+                                            .Where(x => x.ClientId == ClientId)
+                                            .Sum(x => x.Quantity);
+                marketData.MrktBidQuantity = obj.SellPendingOrders[key]
+                                            .Sum(x => x.Quantity);
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    MarketOrderDataList.Add(marketData);
+                });
+            }
+
+            List<double> buyKeyList = obj.BuyPendingOrders.Select(x => x.Key).ToList();
+            buyKeyList.Sort();
+
+            foreach (var key in buyKeyList)
+            {
+                var marketData = ObjFactory.Instance.CreateMarketOrderBookData();
+                marketData.Price = key;
+                marketData.MyAskQuantity = obj.BuyPendingOrders[key]
+                                            .Where(x => x.ClientId == ClientId)
+                                            .Sum(x => x.Quantity);
+                marketData.MrktAskQuantity = obj.BuyPendingOrders[key]
+                                            .Sum(x => x.Quantity);
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    MarketOrderDataList.Add(marketData);
+                });
+            }
+        }
+
+        #endregion OrderBook
+
         private PlaceOrderData GetOrderData(bool isBuy)
         {
             var data = ObjFactory.Instance.CreateStockServicePlaceOrderData();
@@ -325,5 +433,14 @@ namespace Client.ViewModel
         }
 
         #endregion Private Methods
+
+        #region Dispose
+
+        public void Dispose()
+        {
+            base.Cleanup();
+        }
+
+        #endregion Dispose
     }
 }

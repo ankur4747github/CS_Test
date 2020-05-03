@@ -34,6 +34,8 @@
       <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Server.Model" />
+      <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/System.Collections.Generic" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IStockService_RegisterClient_InputMessage">
@@ -48,6 +50,12 @@
   <wsdl:message name="IStockService_BroadcastPriceToClient_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:BroadcastPriceToClient" />
   </wsdl:message>
+  <wsdl:message name="IStockService_BroadcastTradeDataToClient_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:BroadcastTradeDataToClient" />
+  </wsdl:message>
+  <wsdl:message name="IStockService_BroadCastMarketOrderBookData_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:BroadCastMarketOrderBookData" />
+  </wsdl:message>
   <wsdl:portType name="IStockService">
     <wsdl:operation name="RegisterClient">
       <wsdl:input wsaw:Action="http://tempuri.org/IStockService/RegisterClient" message="tns:IStockService_RegisterClient_InputMessage" />
@@ -58,6 +66,12 @@
     </wsdl:operation>
     <wsdl:operation name="BroadcastPriceToClient">
       <wsdl:output wsaw:Action="http://tempuri.org/IStockService/BroadcastPriceToClient" message="tns:IStockService_BroadcastPriceToClient_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BroadcastTradeDataToClient">
+      <wsdl:output wsaw:Action="http://tempuri.org/IStockService/BroadcastTradeDataToClient" message="tns:IStockService_BroadcastTradeDataToClient_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BroadCastMarketOrderBookData">
+      <wsdl:output wsaw:Action="http://tempuri.org/IStockService/BroadCastMarketOrderBookData" message="tns:IStockService_BroadCastMarketOrderBookData_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IStockService" type="tns:IStockService">
@@ -80,6 +94,18 @@
     </wsdl:operation>
     <wsdl:operation name="BroadcastPriceToClient">
       <soap12:operation soapAction="http://tempuri.org/IStockService/BroadcastPriceToClient" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BroadcastTradeDataToClient">
+      <soap12:operation soapAction="http://tempuri.org/IStockService/BroadcastTradeDataToClient" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BroadCastMarketOrderBookData">
+      <soap12:operation soapAction="http://tempuri.org/IStockService/BroadCastMarketOrderBookData" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

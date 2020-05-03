@@ -22,5 +22,11 @@ namespace Server.StockServices
     {
         [OperationContract(IsOneWay = true)]
         void BroadcastPriceToClient(StockData eventData);
+
+        [OperationContract(IsOneWay = true)]
+        void BroadcastTradeDataToClient(TradeOrderData eventData);
+
+        [OperationContract(IsOneWay = true)]
+        void BroadCastMarketOrderBookData(MarketOrderBookData eventData);
     }
 }

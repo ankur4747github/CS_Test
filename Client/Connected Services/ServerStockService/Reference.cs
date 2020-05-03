@@ -151,6 +151,160 @@ namespace Client.ServerStockService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TradeOrderData", Namespace="http://schemas.datacontract.org/2004/07/Server.Model")]
+    [System.SerializableAttribute()]
+    public partial class TradeOrderData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int BuyUserIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int SellUserIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private double TradePriceField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int TradeQuantityField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int BuyUserId {
+            get {
+                return this.BuyUserIdField;
+            }
+            set {
+                if ((this.BuyUserIdField.Equals(value) != true)) {
+                    this.BuyUserIdField = value;
+                    this.RaisePropertyChanged("BuyUserId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int SellUserId {
+            get {
+                return this.SellUserIdField;
+            }
+            set {
+                if ((this.SellUserIdField.Equals(value) != true)) {
+                    this.SellUserIdField = value;
+                    this.RaisePropertyChanged("SellUserId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public double TradePrice {
+            get {
+                return this.TradePriceField;
+            }
+            set {
+                if ((this.TradePriceField.Equals(value) != true)) {
+                    this.TradePriceField = value;
+                    this.RaisePropertyChanged("TradePrice");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int TradeQuantity {
+            get {
+                return this.TradeQuantityField;
+            }
+            set {
+                if ((this.TradeQuantityField.Equals(value) != true)) {
+                    this.TradeQuantityField = value;
+                    this.RaisePropertyChanged("TradeQuantity");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="MarketOrderBookData", Namespace="http://schemas.datacontract.org/2004/07/Server.Model")]
+    [System.SerializableAttribute()]
+    public partial class MarketOrderBookData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.Dictionary<double, System.Collections.Generic.Queue<Client.ServerStockService.PlaceOrderData>> BuyPendingOrdersField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.Dictionary<double, System.Collections.Generic.Queue<Client.ServerStockService.PlaceOrderData>> SellPendingOrdersField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.Dictionary<double, System.Collections.Generic.Queue<Client.ServerStockService.PlaceOrderData>> BuyPendingOrders {
+            get {
+                return this.BuyPendingOrdersField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.BuyPendingOrdersField, value) != true)) {
+                    this.BuyPendingOrdersField = value;
+                    this.RaisePropertyChanged("BuyPendingOrders");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.Dictionary<double, System.Collections.Generic.Queue<Client.ServerStockService.PlaceOrderData>> SellPendingOrders {
+            get {
+                return this.SellPendingOrdersField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SellPendingOrdersField, value) != true)) {
+                    this.SellPendingOrdersField = value;
+                    this.RaisePropertyChanged("SellPendingOrders");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServerStockService.IStockService", CallbackContract=typeof(Client.ServerStockService.IStockServiceCallback))]
     public interface IStockService {
@@ -173,6 +327,12 @@ namespace Client.ServerStockService {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IStockService/BroadcastPriceToClient")]
         void BroadcastPriceToClient(Client.ServerStockService.StockData eventData);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IStockService/BroadcastTradeDataToClient")]
+        void BroadcastTradeDataToClient(Client.ServerStockService.TradeOrderData eventData);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IStockService/BroadCastMarketOrderBookData")]
+        void BroadCastMarketOrderBookData(Client.ServerStockService.MarketOrderBookData eventData);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

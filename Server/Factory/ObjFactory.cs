@@ -69,6 +69,24 @@ namespace Server.Factory
             return (StockData)_objContainer.Resolve(typeof(StockData), MethodBase.GetCurrentMethod().Name);
         }
 
+        public TradeOrderData CreateTradeOrderData()
+        {
+            if (!_objContainer.IsRegistered(typeof(TradeOrderData), MethodBase.GetCurrentMethod().Name))
+            {
+                _objContainer.RegisterInstance(typeof(TradeOrderData), MethodBase.GetCurrentMethod().Name);
+            }
+            return (TradeOrderData)_objContainer.Resolve(typeof(TradeOrderData), MethodBase.GetCurrentMethod().Name);
+        }
+
+        public MarketOrderBookData CreateMarketOrderBookData()
+        {
+            if (!_objContainer.IsRegistered(typeof(MarketOrderBookData), MethodBase.GetCurrentMethod().Name))
+            {
+                _objContainer.RegisterInstance(typeof(MarketOrderBookData), MethodBase.GetCurrentMethod().Name);
+            }
+            return (MarketOrderBookData)_objContainer.Resolve(typeof(MarketOrderBookData), MethodBase.GetCurrentMethod().Name);
+        }
+
         #endregion Data
 
         #region Services

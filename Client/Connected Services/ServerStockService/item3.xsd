@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/System.Collections.Generic" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/System.Collections.Generic" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:8080/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Server.Model" />
+  <xs:complexType name="QueueOfPlaceOrderData7f47x_P8f">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="QueueOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/System.Collections.Generic" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="PlaceOrderData" Namespace="http://schemas.datacontract.org/2004/07/Server.Model" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Server.Model" name="_array" nillable="true" type="q1:ArrayOfPlaceOrderData" />
+      <xs:element name="_head" type="xs:int" />
+      <xs:element name="_size" type="xs:int" />
+      <xs:element name="_tail" type="xs:int" />
+      <xs:element name="_version" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="QueueOfPlaceOrderData7f47x_P8f" nillable="true" type="tns:QueueOfPlaceOrderData7f47x_P8f" />
+</xs:schema>

@@ -60,8 +60,9 @@
   <ItemGroup>
     <Compile Include="Constants\Constant.cs" />
     <Compile Include="Factory\ObjFactory.cs" />
-    <Compile Include="Model\PendingOrderData.cs" />
+    <Compile Include="Model\MarketOrderBookData.cs" />
     <Compile Include="Model\PlaceOrderData.cs" />
+    <Compile Include="Model\TradeOrderData.cs" />
     <Compile Include="Services\Logging\ILog.cs" />
     <Compile Include="Services\Logging\Logger.cs" />
     <Compile Include="Services\Stock\BroadCastData.cs" />

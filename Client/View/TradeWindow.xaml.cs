@@ -11,7 +11,7 @@ namespace Client
         public TradeWindow()
         {
             InitializeComponent();
-            //DispatcherHelper.Initialize();
+            DispatcherHelper.Initialize();
             ViewModel = new TradeWindowViewModel();
             this.DataContext = ViewModel;
         }

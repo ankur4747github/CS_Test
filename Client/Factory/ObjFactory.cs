@@ -1,4 +1,5 @@
-﻿using Client.Services.Stock;
+﻿using Client.Model;
+using Client.Services.Stock;
 using Services.Logging;
 using System.Reflection;
 using Unity;
@@ -87,6 +88,16 @@ namespace Client.Factory
                 _objContainer.RegisterSingleton(typeof(ServerStockService.PlaceOrderData), MethodBase.GetCurrentMethod().Name);
             }
             return (ServerStockService.PlaceOrderData)_objContainer.Resolve(typeof(ServerStockService.PlaceOrderData), MethodBase.GetCurrentMethod().Name);
+        }
+
+
+        public MarketOrderData CreateMarketOrderBookData()
+        {
+            if (!_objContainer.IsRegistered(typeof(MarketOrderData), MethodBase.GetCurrentMethod().Name))
+            {
+                _objContainer.RegisterSingleton(typeof(MarketOrderData), MethodBase.GetCurrentMethod().Name);
+            }
+            return (MarketOrderData)_objContainer.Resolve(typeof(MarketOrderData), MethodBase.GetCurrentMethod().Name);
         }
 
         #endregion Data
