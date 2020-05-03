@@ -194,14 +194,14 @@ namespace Server.Services.Stock
                 int tradeQuantity = data.Quantity;
                 oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
                 data.Quantity = 0;
-                Task.Run(() => UpdateTrade(oldOrderData.ClientId, data.ClientId, tradeQuantity, oldOrderData.Price));
+                UpdateTrade(oldOrderData.ClientId, data.ClientId, tradeQuantity, oldOrderData.Price);
             }
             else
             {
                 int tradeQuantity = oldOrderData.Quantity;
                 oldOrderData.Quantity = 0;
                 data.Quantity = data.Quantity - tradeQuantity;
-                Task.Run(() => UpdateTrade(oldOrderData.ClientId, data.ClientId, tradeQuantity, oldOrderData.Price));
+                UpdateTrade(oldOrderData.ClientId, data.ClientId, tradeQuantity, oldOrderData.Price);
             }
         }
 
@@ -212,14 +212,14 @@ namespace Server.Services.Stock
                 int tradeQuantity = oldOrderData.Quantity;
                 oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
                 data.Quantity = 0;
-                Task.Run(() => UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price));
+                UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price);
             }
             else
             {
                 int tradeQuantity = data.Quantity;
                 oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
                 data.Quantity = 0;
-                Task.Run(() => UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price));
+                UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price);
             }
         }
 
@@ -236,8 +236,8 @@ namespace Server.Services.Stock
             tradeData.TradePrice = tradePrice;
             _tradeOrderData.Add(tradeData);
 
-            ObjFactory.Instance.CreateBroadCastData().BroadCastTradeData(tradeData,
-                ObjFactory.Instance.CreateRegisterClients().GetClients());
+            Task.Run(() => ObjFactory.Instance.CreateBroadCastData().BroadCastTradeData(tradeData,
+                           ObjFactory.Instance.CreateRegisterClients().GetClients()));
 
             ObjFactory.Instance.CreateLogger().Log(string.Format(
                 "BuyUserId {0} sellUserId {1} tradeQuantity {2} tradePrice {3}",
