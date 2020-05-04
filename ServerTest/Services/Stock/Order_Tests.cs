@@ -501,6 +501,135 @@ namespace ServerTest.Services.Stock
             }
         }
 
+        [TestMethod]
+        [DataRow(1, 2, 3,
+                120, 121, 122,
+                120, 120, 2)]
+        [DataRow(1, 2, 3,
+                120, 121, 119,
+                120, 120, 1)]
+        [DataRow(1, 2, 3,
+                120, 119, 118,
+                120, 120, 0)]
+        public void CheckCorrectPriceTrade_OneSeller_TwoBuyer_Tests
+            (int sellerClientA, int buyerClientB, int buyerClientC,
+            int sellerClientA_Price, int buyerClientB_Price, int buyerClientC_Price,
+            int firstOrderPrice, int secondOrderPrice, int totalOrder)
+        {
+            var sellerClientAData = GetOrderData(sellerClientA, sellerClientA_Price, 20, false);
+            _order.AddOrderIntoQueue(sellerClientAData);
+            var buyerClientBData = GetOrderData(buyerClientB, buyerClientB_Price, 10, true);
+            _order.AddOrderIntoQueue(buyerClientBData);
+            var buyerClientCData = GetOrderData(buyerClientC, buyerClientC_Price, 10, true);
+            _order.AddOrderIntoQueue(buyerClientCData);
+
+            Thread.Sleep(2000);
+            var listTradeOrder = _order.GetTradeListOrderData();
+            if (listTradeOrder.Count == totalOrder)
+            {
+                if (totalOrder == 1)
+                {
+                    bool trade1Result = (listTradeOrder[0].BuyUserId == buyerClientB &&
+                                         listTradeOrder[0].SellUserId == sellerClientA &&
+                                         listTradeOrder[0].TradePrice == firstOrderPrice);
+
+                    Assert.IsTrue(trade1Result);
+                }
+                else if (totalOrder == 2)
+                {
+                    bool trade1Result = (listTradeOrder[0].BuyUserId == buyerClientB &&
+                                         listTradeOrder[0].SellUserId == sellerClientA &&
+                                         listTradeOrder[0].TradePrice == firstOrderPrice);
+
+                    bool trade2Result = (listTradeOrder[1].BuyUserId == buyerClientC &&
+                                     listTradeOrder[1].SellUserId == sellerClientA &&
+                                     listTradeOrder[1].TradePrice == secondOrderPrice);
+
+                    Assert.IsTrue(trade1Result && trade2Result);
+                }
+                else if (listTradeOrder.Count == totalOrder)
+                {
+                    Assert.IsTrue(listTradeOrder.Count == totalOrder);
+                }
+
+
+
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+
+        [TestMethod]
+        [DataRow(1, 2, 3, 4,
+                120, 122, 119,120,
+                120, 122, 2)]
+        [DataRow(1, 2, 3, 4,
+                120, 122, 119, 123,
+                120, 122, 1)]
+        [DataRow(1, 2, 3, 4,
+                120, 122, 123, 124,
+                120, 122, 0)]
+        //Example
+        // A placed Buy order Price = 120 Quantity = 10
+        // B placed Buy order Price = 122 Quantity = 10
+        // C placed Sell order Price = 119 Quantity = 10
+        // D placed Sell order Price = 120 Quantity = 10
+        // TradeOrders
+        // A will get price 120
+        // B will get price 122
+        // C will get 3 Quantity Buyer C, Seller A
+        public void CheckCorrectPriceTrade_TwoBuyer_TwoSeller_Tests
+           (int buyerClientA, int buyerClientB, int sellerClientC, int sellerClientD,
+           int buyerClientA_Price, int buyerClientB_Price, int sellerClientC_Price, int sellerClientD_Price,
+           int firstOrderPrice, int secondOrderPrice, int totalOrder)
+        {
+            var buyerClientAData = GetOrderData(buyerClientA, buyerClientA_Price, 10, true);
+            _order.AddOrderIntoQueue(buyerClientAData);
+            var buyerClientBData = GetOrderData(buyerClientB, buyerClientB_Price, 10, true);
+            _order.AddOrderIntoQueue(buyerClientBData);
+            var sellerClientCData = GetOrderData(sellerClientC, sellerClientC_Price, 10, false);
+            _order.AddOrderIntoQueue(sellerClientCData);
+            var sellerClientDData = GetOrderData(sellerClientD, sellerClientD_Price, 10, false);
+            _order.AddOrderIntoQueue(sellerClientDData);
+
+            Thread.Sleep(2000);
+            var listTradeOrder = _order.GetTradeListOrderData();
+            if (listTradeOrder.Count == totalOrder)
+            {
+                if (totalOrder == 1)
+                {
+                    bool trade1Result = (listTradeOrder[0].BuyUserId == buyerClientA &&
+                                         listTradeOrder[0].SellUserId == sellerClientC &&
+                                         listTradeOrder[0].TradePrice == firstOrderPrice);
+
+                    Assert.IsTrue(trade1Result);
+                }
+                else if (totalOrder == 2)
+                {
+                    bool trade1Result = (listTradeOrder[0].BuyUserId == buyerClientA &&
+                                         listTradeOrder[0].SellUserId == sellerClientC &&
+                                         listTradeOrder[0].TradePrice == firstOrderPrice);
+
+                    bool trade2Result = (listTradeOrder[1].BuyUserId == buyerClientB &&
+                                     listTradeOrder[1].SellUserId == sellerClientD &&
+                                     listTradeOrder[1].TradePrice == secondOrderPrice);
+
+                    Assert.IsTrue(trade1Result && trade2Result);
+                }
+                else if (listTradeOrder.Count == totalOrder)
+                {
+                    Assert.IsTrue(listTradeOrder.Count == totalOrder);
+                }
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
         #endregion CorrectPrice
 
         #region TimePriorityMatching
