@@ -139,11 +139,13 @@ namespace Server.Factory
         #endregion Services
 
         #region CleanUp
+
         public void Cleanup()
         {
             _objContainer.Dispose();
             _objContainer = new UnityContainer();
         }
-        #endregion
+
+        #endregion CleanUp
     }
 }

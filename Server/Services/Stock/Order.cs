@@ -248,8 +248,6 @@ namespace Server.Services.Stock
 
         #region MarketOrderBook
 
-        
-
         private void UpdateMarketOrderBook()
         {
             var marketOrderBook = GetOrderData();

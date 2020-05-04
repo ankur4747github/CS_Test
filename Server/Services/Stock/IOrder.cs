@@ -8,6 +8,7 @@ namespace Server.Services.Stock
         void AddOrderIntoQueue(PlaceOrderData data);
 
         void UpdateMarketOrderBook(int clientId);
+
         List<TradeOrderData> GetTradeListOrderData();
 
         MarketOrderBookData GetOrderData();

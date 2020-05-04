@@ -7,7 +7,8 @@
         xmlns:local="clr-namespace:Client"
         xmlns:p="clr-namespace:Client.Properties"
         mc:Ignorable="d"
-        Title="TradeWindow" Width="1000">
+        Title="TradeWindow" MinHeight="700"
+              MinWidth="500" Width="1000">
     <Window.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BoolToVis" />
         <converter:InverseBooleanToVisibilityConverter x:Key="InverseBoolToVis" />
@@ -49,9 +50,7 @@
             </Button>
         </StackPanel>
 
-        <Grid Visibility="{Binding IsTradeUIVisible, Mode=OneWay,Converter={StaticResource BoolToVis}}"
-              MinHeight="300"
-              MinWidth="500">
+        <Grid Visibility="{Binding IsTradeUIVisible, Mode=OneWay,Converter={StaticResource BoolToVis}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>

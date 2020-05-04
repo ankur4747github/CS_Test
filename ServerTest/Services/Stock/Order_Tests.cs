@@ -517,13 +517,10 @@ namespace ServerTest.Services.Stock
 
                     Assert.IsTrue(trade1Result && trade2Result);
                 }
-                else if(listTradeOrder.Count == totalOrder)
+                else if (listTradeOrder.Count == totalOrder)
                 {
                     Assert.IsTrue(listTradeOrder.Count == totalOrder);
                 }
-                
-
-                
             }
             else
             {
@@ -581,9 +578,6 @@ namespace ServerTest.Services.Stock
                 {
                     Assert.IsTrue(listTradeOrder.Count == totalOrder);
                 }
-
-
-
             }
             else
             {
@@ -591,10 +585,9 @@ namespace ServerTest.Services.Stock
             }
         }
 
-
         [TestMethod]
         [DataRow(1, 2, 3, 4,
-                120, 122, 119,120,
+                120, 122, 119, 120,
                 120, 122, 2)]
         [DataRow(1, 2, 3, 4,
                 120, 122, 119, 123,
