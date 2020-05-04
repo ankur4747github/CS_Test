@@ -46,7 +46,8 @@
                      Text="{Binding ClientId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             </TextBox>
             <Button Content="{x:Static p:Resources.Ok_Content}"
-                    Command="{Binding StartCommand}">
+                    Command="{Binding StartCommand}"
+                    IsDefault="True">
             </Button>
         </StackPanel>
 
