@@ -115,6 +115,36 @@ namespace ServerTest.Services.Stock
             }
         }
 
+        [TestMethod]
+        [DataRow(1, 120, 30, true, 0)]
+        [DataRow(3, 190, 330, true, 0)]
+        [DataRow(5, 90, 390, true, 0)]
+        public void CheckOnlyBuyOrder_Tests(int buyerId, double price, int quantity, bool isBuy, int totalOrder)
+        {
+            var buyerData = GetOrderData(buyerId, price, quantity, isBuy);
+            _order.AddOrderIntoQueue(buyerData);
+            Thread.Sleep(2000);
+            bool isOrderPlaced = _order.GetOrderData().BuyPendingOrders.Contains(buyerData);
+            Thread.Sleep(2000);
+            var listTradeOrder = _order.GetTradeListOrderData();
+            Assert.IsTrue((listTradeOrder.Count == totalOrder) && isOrderPlaced);
+        }
+
+        [TestMethod]
+        [DataRow(1, 120, 30, false, 0)]
+        [DataRow(3, 190, 330, false, 0)]
+        [DataRow(5, 90, 390, false, 0)]
+        public void CheckOnlySellOrder_Tests(int selledId, double price, int quantity, bool isBuy, int totalOrder)
+        {
+            var sellerData = GetOrderData(selledId, price, quantity, isBuy);
+            _order.AddOrderIntoQueue(sellerData);
+            Thread.Sleep(2000);
+            bool isOrderPlaced = _order.GetOrderData().SellPendingOrders.Contains(sellerData);
+            Thread.Sleep(2000);
+            var listTradeOrder = _order.GetTradeListOrderData();
+            Assert.IsTrue((listTradeOrder.Count == totalOrder) && isOrderPlaced);
+        }
+
         #endregion Order Execute
 
         #region Quantity
