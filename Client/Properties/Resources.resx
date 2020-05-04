@@ -157,7 +157,7 @@
     <value>Sell</value>
   </data>
   <data name="StockPrice" xml:space="preserve">
-    <value>Stock Price:-</value>
+    <value>Nifty Bank :-</value>
   </data>
   <data name="UnableRegister" xml:space="preserve">
     <value>Unable to Register, Please try again or check server availability</value>

@@ -216,9 +216,9 @@ namespace Server.Services.Stock
             }
             else
             {
-                int tradeQuantity = data.Quantity;
+                int tradeQuantity = oldOrderData.Quantity;
                 oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
-                data.Quantity = 0;
+                data.Quantity = data.Quantity - tradeQuantity;
                 UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price);
             }
         }

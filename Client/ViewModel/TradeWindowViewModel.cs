@@ -363,25 +363,6 @@ namespace Client.ViewModel
             });
         }
 
-        #endregion Update Data
-
-        #region Validation
-
-        private bool IsValidPriceAndQuantity()
-        {
-            if (BuySellPrice > 0 && Quantity > 0)
-            {
-                return true;
-            }
-            else
-            {
-                MessageBox.Show(resourceManager.GetString("ValidPriceQuantity"));
-            }
-            return false;
-        }
-
-        #endregion Validation
-
         #region OrderBook
 
         private void UpdateOrderBook(MarketOrderBookData obj)
@@ -406,12 +387,12 @@ namespace Client.ViewModel
                     if (MarketOrderDataList.Any(x => x.Price == item.Price))
                     {
                         marketData = MarketOrderDataList.Where(x => x.Price == item.Price).FirstOrDefault();
-                        AddAskMrktQuantity(item, marketData);
+                        AddBidQuantity(item, marketData);
                     }
                     else
                     {
                         marketData.Price = item.Price;
-                        AddAskMrktQuantity(item, marketData);
+                        AddBidQuantity(item, marketData);
                         MarketOrderDataList.Add(marketData);
                     }
                 }
@@ -430,12 +411,12 @@ namespace Client.ViewModel
                     if (MarketOrderDataList.Any(x => x.Price == item.Price))
                     {
                         marketData = MarketOrderDataList.Where(x => x.Price == item.Price).FirstOrDefault();
-                        AddBidQuantity(item, marketData);
+                        AddAskMrktQuantity(item, marketData);
                     }
                     else
                     {
                         marketData.Price = item.Price;
-                        AddBidQuantity(item, marketData);
+                        AddAskMrktQuantity(item, marketData);
                         MarketOrderDataList.Add(marketData);
                     }
                 }
@@ -461,6 +442,25 @@ namespace Client.ViewModel
         }
 
         #endregion OrderBook
+
+        #endregion Update Data
+
+        #region Validation
+
+        private bool IsValidPriceAndQuantity()
+        {
+            if (BuySellPrice > 0 && Quantity > 0)
+            {
+                return true;
+            }
+            else
+            {
+                MessageBox.Show(resourceManager.GetString("ValidPriceQuantity"));
+            }
+            return false;
+        }
+
+        #endregion Validation
 
         private PlaceOrderData GetOrderData(bool isBuy)
         {

@@ -3,16 +3,21 @@ using Server.Factory;
 using Server.Services.Stock;
 using Server.StockServices;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ServerTest.Services.Stock
 {
     [TestClass]
     public class StockService_Tests
     {
+        #region Fields
+
         private IStockService _stockService;
         private IRegisterClients _registerClients;
         private IOrder _order;
+
+        #endregion Fields
+
+        #region Setup
 
         [TestInitialize]
         public void SetUp()
@@ -22,6 +27,10 @@ namespace ServerTest.Services.Stock
             _registerClients = ObjFactory.Instance.CreateRegisterClients();
             _order = ObjFactory.Instance.CreateOrder();
         }
+
+        #endregion Setup
+
+        #region Test Methods
 
         [TestMethod]
         [DataRow(0, false)]
@@ -62,5 +71,7 @@ namespace ServerTest.Services.Stock
             }
             Thread.Sleep(1000);
         }
+
+        #endregion Test Methods
     }
 }

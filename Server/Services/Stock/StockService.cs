@@ -52,7 +52,7 @@ namespace Server.StockServices
                 ObjFactory.Instance.CreateRegisterClients().GetClients().Count > 0)
             {
                 var eventDataType = ObjFactory.Instance.CreateStockData();
-                eventDataType.StockPrice = new Random().Next(100, 120);
+                eventDataType.StockPrice = new Random().Next(19000, 21000);
                 ObjFactory.Instance.CreateLogger()
                         .Log("BroadCast Price = " + eventDataType.StockPrice, this.GetType().Name, false);
                 lock (_locker)

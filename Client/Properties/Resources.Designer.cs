@@ -178,7 +178,7 @@ namespace Client.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Stock Price:-.
+        ///   Looks up a localized string similar to Nifty Bank :-.
         /// </summary>
         public static string StockPrice {
             get {
