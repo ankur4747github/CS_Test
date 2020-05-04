@@ -209,7 +209,7 @@ namespace Server.Services.Stock
         {
             if (data.Quantity < oldOrderData.Quantity)
             {
-                int tradeQuantity = oldOrderData.Quantity;
+                int tradeQuantity = data.Quantity;
                 oldOrderData.Quantity = oldOrderData.Quantity - tradeQuantity;
                 data.Quantity = 0;
                 UpdateTrade(data.ClientId, oldOrderData.ClientId, tradeQuantity, oldOrderData.Price);

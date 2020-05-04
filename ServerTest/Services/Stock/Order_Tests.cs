@@ -185,6 +185,12 @@ namespace ServerTest.Services.Stock
         [DataRow(1, 2, 3, 4, 
                  10, 10, 8, 5, 
                  8, 2, 3, 3)]
+        [DataRow(1, 2, 3, 4,
+                 100, 80, 75, 75,
+                 75, 25, 50, 3)]
+        [DataRow(1, 2, 3, 4,
+                 100, 80, 10, 105,
+                 10, 90, 15, 3)]
         //Example
         // A placed Buy order Quantity = 10
         // B placed Buy order Quantity = 10 
@@ -233,9 +239,63 @@ namespace ServerTest.Services.Stock
             }
         }
 
+        [TestMethod]
+        [DataRow(1, 2, 3, 4,
+                 100, 80, 10, 105,
+                 10, 90, 15, 3)]
+        //Example
+        // A placed Sell order Quantity = 100
+        // B placed Sell order Quantity = 80 
+        // C placed Buy order Quantity = 10
+        // C placed Buy order Quantity = 105
+        // TradeOrders
+        // C will get 10 Quantity Buyer C, Seller A
+        // D will get 90 Quantity Buyer B, Seller C
+        // D will get 15 Quantity Buyer B, Seller D
+        public void CheckCorrectQuantityTrade_MultiTrade_SellerFirst
+            (int sellerClientA, int sellerClientB, int buyerClientC, int buyerClientD,
+            int sellerClientA_Quantity, int sellerClientB_Quantity, int buyerClientC_Quantity, int buyerClientD_Quantity,
+            int firstOrderQuantity, int secondOrderQuantity, int thirdOrderQuantity,
+            int totalOrder)
+        {
+            var sellerClientAData = GetOrderData(sellerClientA, 120, sellerClientA_Quantity, false);
+            _order.AddOrderIntoQueue(sellerClientAData);
+            var sellerClientBData = GetOrderData(sellerClientB, 120, sellerClientB_Quantity, false);
+            _order.AddOrderIntoQueue(sellerClientBData);
+
+            var buyerClientCData = GetOrderData(buyerClientC, 120, buyerClientC_Quantity, true);
+            _order.AddOrderIntoQueue(buyerClientCData);
+            var buyerClientDData = GetOrderData(buyerClientD, 120, buyerClientD_Quantity, true);
+            _order.AddOrderIntoQueue(buyerClientDData);
+
+            Thread.Sleep(2000);
+            var listTradeOrder = _order.GetTradeListOrderData();
+            if (listTradeOrder.Count == totalOrder)
+            {
+                bool trade1Result = (listTradeOrder[0].BuyUserId == buyerClientC &&
+                                     listTradeOrder[0].SellUserId == sellerClientA &&
+                                     listTradeOrder[0].TradeQuantity == firstOrderQuantity);
+
+                bool trade2Result = (listTradeOrder[1].BuyUserId == buyerClientD &&
+                                     listTradeOrder[1].SellUserId == sellerClientA &&
+                                     listTradeOrder[1].TradeQuantity == secondOrderQuantity);
+
+                bool trade3Result = (listTradeOrder[2].BuyUserId == buyerClientD &&
+                                     listTradeOrder[2].SellUserId == sellerClientB &&
+                                     listTradeOrder[2].TradeQuantity == thirdOrderQuantity);
+
+                Assert.IsTrue(trade1Result && trade2Result && trade3Result);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
+
         #endregion Quantity
 
-        #region CorrectPrice
+            #region CorrectPrice
 
         [TestMethod]
         [DataRow(1, 2, 120, 119, 100, false, true)]
