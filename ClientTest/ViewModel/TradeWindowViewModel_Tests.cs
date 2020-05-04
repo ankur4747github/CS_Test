@@ -167,6 +167,36 @@ namespace ClientTest.ViewModel
         }
 
         [TestMethod]
+        [DataRow(1, true, 100, 120, 2)]
+        [DataRow(1, true, 100, 120, 2)]
+        public void CheckMultiBidOrderBookUpdate_Test
+          (int clientId, bool isBuy, int quantity, double price, int count)
+        {
+            DispatcherHelper.Initialize();
+            var eventData = ObjFactory.Instance.CreateMarketOrderBookData();
+            eventData.BuyPendingOrders = new Client.ServerStockService.PlaceOrderData[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                var mrktData = GetMarketData(clientId, isBuy, quantity, price + i);
+                eventData.BuyPendingOrders[i] = mrktData;
+            }
+
+            ViewModel.ClientId = clientId;
+            Messenger.Default.Send(eventData, MessengerToken.BROADCASTMARKETORDERBOOK);
+            Thread.Sleep(2000);
+            bool isValidOrderCount = ViewModel.MarketOrderDataList.Count == count;
+            for (int i = 0; i < count; i++)
+            {
+                bool isValidDataAdded = (ViewModel.MarketOrderDataList[i].MrktBidQuantity == quantity &&
+               ViewModel.MarketOrderDataList[i].MyBidQuantity == quantity &&
+               ViewModel.MarketOrderDataList[i].Price == price + i);
+
+                Assert.IsTrue(isValidOrderCount && isValidDataAdded);
+            }
+        }
+
+        [TestMethod]
         [DataRow(1, 2, 100, 120, 121, true)]
         [DataRow(1, 2, 100, 120, 121, false)]
         public void CheckAskBidOrderBookUpdate_Test
@@ -218,6 +248,36 @@ namespace ClientTest.ViewModel
                ViewModel.MarketOrderDataList[1].Price == sellerPrice);
 
             Assert.IsTrue(isValidOrderCount && isBidValidDataAdded && isAskValidDataAdded);
+        }
+
+        [TestMethod]
+        [DataRow(1, false, 100, 120, 2)]
+        [DataRow(1, false, 100, 120, 2)]
+        public void CheckMultiAskOrderBookUpdate_Test
+         (int clientId, bool isBuy, int quantity, double price, int count)
+        {
+            DispatcherHelper.Initialize();
+            var eventData = ObjFactory.Instance.CreateMarketOrderBookData();
+            eventData.SellPendingOrders = new Client.ServerStockService.PlaceOrderData[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                var mrktData = GetMarketData(clientId, isBuy, quantity, price + i);
+                eventData.SellPendingOrders[i] = mrktData;
+            }
+
+            ViewModel.ClientId = clientId;
+            Messenger.Default.Send(eventData, MessengerToken.BROADCASTMARKETORDERBOOK);
+            Thread.Sleep(2000);
+            bool isValidOrderCount = ViewModel.MarketOrderDataList.Count == count;
+            for (int i = 0; i < count; i++)
+            {
+                bool isValidDataAdded = (ViewModel.MarketOrderDataList[i].MrktAskQuantity == quantity &&
+               ViewModel.MarketOrderDataList[i].MyAskQuantity == quantity &&
+               ViewModel.MarketOrderDataList[i].Price == price + i);
+
+                Assert.IsTrue(isValidOrderCount && isValidDataAdded);
+            }
         }
 
         #endregion Check OrderBook Update
