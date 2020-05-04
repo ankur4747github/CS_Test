@@ -1,4 +1,5 @@
-﻿using Client.ViewModel;
+﻿using Client.Factory;
+using Client.ViewModel;
 using GalaSoft.MvvmLight.Threading;
 using System.Windows;
 
@@ -12,7 +13,7 @@ namespace Client
         {
             InitializeComponent();
             DispatcherHelper.Initialize();
-            ViewModel = new TradeWindowViewModel();
+            ViewModel = ObjFactory.Instance.CreateTradeWindowViewModel();
             this.DataContext = ViewModel;
         }
     }

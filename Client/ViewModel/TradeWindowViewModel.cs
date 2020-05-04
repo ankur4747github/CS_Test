@@ -253,6 +253,80 @@ namespace Client.ViewModel
 
         #endregion InitCommand
 
+        #region Public Methods
+
+        #region Button Click
+
+        public async void StartCommandClick(object obj)
+        {
+            if (IsValidClientID())
+            {
+                IsProgressBarVisible = true;
+                await Task.Delay(1000);
+                StartRegisterClient();
+            }
+            else
+            {
+                MessageBox.Show(resourceManager.GetString("EmptyID"));
+            }
+        }
+
+        public void SellCommandClick(object obj)
+        {
+            if (IsValidPriceAndQuantity())
+            {
+                ObjFactory.Instance.CreateLogger().Log(string.Format("Start Sell Price {0} Quantity {1}",
+                    BuySellPrice, Quantity), GetType().Name, false);
+                var data = GetOrderData(false);
+                if (!ObjFactory.Instance.CreateStockServiceClients().PlaceOrder(data))
+                {
+                    IsTradeUIVisible = false;
+                    MessageBox.Show(resourceManager.GetString("PlaceOrderFailed"));
+                }
+            }
+        }
+
+        public void BuyCommandClick(object obj)
+        {
+            if (IsValidPriceAndQuantity())
+            {
+                ObjFactory.Instance.CreateLogger().Log(string.Format("Start Buy Price {0} Quantity {1}",
+                    BuySellPrice, Quantity), GetType().Name, false);
+                var data = GetOrderData(true);
+                if (!ObjFactory.Instance.CreateStockServiceClients().PlaceOrder(data))
+                {
+                    IsTradeUIVisible = false;
+                    MessageBox.Show(resourceManager.GetString("PlaceOrderFailed"));
+                }
+            }
+        }
+
+        #endregion Button Click
+
+        #region Validation
+
+        public bool IsValidClientID()
+        {
+            return ClientId > 0;
+        }
+
+        public bool IsValidPriceAndQuantity()
+        {
+            if (BuySellPrice > 0 && Quantity > 0)
+            {
+                return true;
+            }
+            else
+            {
+                MessageBox.Show(resourceManager.GetString("ValidPriceQuantity"));
+            }
+            return false;
+        }
+
+        #endregion Validation
+
+        #endregion Public Methods
+
         #region Private Methods
 
         #region InitMessenger
@@ -277,59 +351,11 @@ namespace Client.ViewModel
 
         #endregion InitMessenger
 
-        #region Button Click
-
-        private async void StartCommandClick(object obj)
-        {
-            if (ClientId > 0)
-            {
-                IsProgressBarVisible = true;
-                await Task.Delay(1000);
-                StartRegisterClient();
-            }
-            else
-            {
-                MessageBox.Show(resourceManager.GetString("EmptyID"));
-            }
-        }
-
-        private void SellCommandClick(object obj)
-        {
-            if (IsValidPriceAndQuantity())
-            {
-                ObjFactory.Instance.CreateLogger().Log(string.Format("Start Sell Price {0} Quantity {1}",
-                    BuySellPrice, Quantity), GetType().Name, false);
-                var data = GetOrderData(false);
-                if (!ObjFactory.Instance.CreateRegisterClients().PlaceOrder(data))
-                {
-                    IsTradeUIVisible = false;
-                    MessageBox.Show(resourceManager.GetString("PlaceOrderFailed"));
-                }
-            }
-        }
-
-        private void BuyCommandClick(object obj)
-        {
-            if (IsValidPriceAndQuantity())
-            {
-                ObjFactory.Instance.CreateLogger().Log(string.Format("Start Buy Price {0} Quantity {1}",
-                    BuySellPrice, Quantity), GetType().Name, false);
-                var data = GetOrderData(true);
-                if (!ObjFactory.Instance.CreateRegisterClients().PlaceOrder(data))
-                {
-                    IsTradeUIVisible = false;
-                    MessageBox.Show(resourceManager.GetString("PlaceOrderFailed"));
-                }
-            }
-        }
-
-        #endregion Button Click
-
         #region Register Client
 
         private async void StartRegisterClient()
         {
-            await Task.Run(() => ObjFactory.Instance.CreateRegisterClients().Register(ClientId))
+            await Task.Run(() => ObjFactory.Instance.CreateStockServiceClients().Register(ClientId))
                                 .ContinueWith(task => CheckIsClientRegitered(task.Result));
         }
 
@@ -444,23 +470,6 @@ namespace Client.ViewModel
         #endregion OrderBook
 
         #endregion Update Data
-
-        #region Validation
-
-        private bool IsValidPriceAndQuantity()
-        {
-            if (BuySellPrice > 0 && Quantity > 0)
-            {
-                return true;
-            }
-            else
-            {
-                MessageBox.Show(resourceManager.GetString("ValidPriceQuantity"));
-            }
-            return false;
-        }
-
-        #endregion Validation
 
         private PlaceOrderData GetOrderData(bool isBuy)
         {

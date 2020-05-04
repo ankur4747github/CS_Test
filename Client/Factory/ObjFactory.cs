@@ -1,5 +1,6 @@
 ﻿using Client.Model;
 using Client.Services.Stock;
+using Client.ViewModel;
 using Services.Logging;
 using System.Reflection;
 using Unity;
@@ -59,7 +60,7 @@ namespace Client.Factory
 
         #region Services
 
-        public IStockService CreateRegisterClients()
+        public Services.Stock.IStockService CreateStockServiceClients()
         {
             if (!_objContainer.IsRegistered(typeof(Services.Stock.StockService), MethodBase.GetCurrentMethod().Name))
             {
@@ -99,6 +100,47 @@ namespace Client.Factory
             return (MarketOrderData)_objContainer.Resolve(typeof(MarketOrderData), MethodBase.GetCurrentMethod().Name);
         }
 
+        public ServerStockService.StockData CreateStockData()
+        {
+            if (!_objContainer.IsRegistered(typeof(ServerStockService.StockData), MethodBase.GetCurrentMethod().Name))
+            {
+                _objContainer.RegisterInstance(typeof(ServerStockService.StockData), MethodBase.GetCurrentMethod().Name);
+            }
+            return (ServerStockService.StockData)_objContainer.Resolve(typeof(ServerStockService.StockData), MethodBase.GetCurrentMethod().Name);
+        }
+
+        public ServerStockService.TradeOrderData CreateTradeOrderData()
+        {
+            if (!_objContainer.IsRegistered(typeof(ServerStockService.TradeOrderData), MethodBase.GetCurrentMethod().Name))
+            {
+                _objContainer.RegisterInstance(typeof(ServerStockService.TradeOrderData), MethodBase.GetCurrentMethod().Name);
+            }
+            return (ServerStockService.TradeOrderData)_objContainer.Resolve(typeof(ServerStockService.TradeOrderData), MethodBase.GetCurrentMethod().Name);
+        }
+
         #endregion Data
+
+        #region ViewModel
+
+        public TradeWindowViewModel CreateTradeWindowViewModel()
+        {
+            if (!_objContainer.IsRegistered(typeof(TradeWindowViewModel), MethodBase.GetCurrentMethod().Name))
+            {
+                _objContainer.RegisterSingleton(typeof(TradeWindowViewModel), MethodBase.GetCurrentMethod().Name);
+            }
+            return (TradeWindowViewModel)_objContainer.Resolve(typeof(TradeWindowViewModel), MethodBase.GetCurrentMethod().Name);
+        }
+
+        #endregion ViewModel
+
+        #region CleanUp
+
+        public void Cleanup()
+        {
+            _objContainer.Dispose();
+            _objContainer = new UnityContainer();
+        }
+
+        #endregion CleanUp
     }
 }

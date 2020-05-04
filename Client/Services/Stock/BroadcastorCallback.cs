@@ -11,17 +11,26 @@ namespace Client.Services.Stock
 
         public void BroadcastPriceToClient(StockData eventData)
         {
-            Task.Run(() => Messenger.Default.Send(eventData, MessengerToken.BROADCASTSTOCKPRICE));
+            if (eventData != null)
+            {
+                Task.Run(() => Messenger.Default.Send(eventData, MessengerToken.BROADCASTSTOCKPRICE));
+            }
         }
 
         public void BroadcastTradeDataToClient(TradeOrderData eventData)
         {
-            Task.Run(() => Messenger.Default.Send(eventData, MessengerToken.BROADCASTTRADEDATA));
+            if (eventData != null)
+            {
+                Task.Run(() => Messenger.Default.Send(eventData, MessengerToken.BROADCASTTRADEDATA));
+            }
         }
 
         public void BroadCastMarketOrderBookData(MarketOrderBookData eventData)
         {
-            Task.Run(() => Messenger.Default.Send(eventData, MessengerToken.BROADCASTMARKETORDERBOOK));
+            if (eventData != null)
+            {
+                Task.Run(() => Messenger.Default.Send(eventData, MessengerToken.BROADCASTMARKETORDERBOOK));
+            }
         }
 
         #endregion Public Methods
