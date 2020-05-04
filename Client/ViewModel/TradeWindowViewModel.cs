@@ -403,13 +403,13 @@ namespace Client.ViewModel
 
         private void UpdateBuyOrderBook(MarketOrderBookData obj)
         {
-            if (obj.BuyPendingOrders.Count() > 0)
+            if (obj.BuyPendingOrders?.Count() > 0)
             {
                 var list = obj.BuyPendingOrders.OrderBy(x => x.Price).ToList();
 
                 foreach (var item in list)
                 {
-                    var marketData = ObjFactory.Instance.CreateMarketOrderBookData();
+                    var marketData = ObjFactory.Instance.CreateMarketOrderData();
                     if (MarketOrderDataList.Any(x => x.Price == item.Price))
                     {
                         marketData = MarketOrderDataList.Where(x => x.Price == item.Price).FirstOrDefault();
@@ -427,12 +427,12 @@ namespace Client.ViewModel
 
         private void UpdateSellOrderBook(MarketOrderBookData obj)
         {
-            if (obj.SellPendingOrders.Count() > 0)
+            if (obj.SellPendingOrders?.Count() > 0)
             {
                 var list = obj.SellPendingOrders.OrderBy(x => x.Price).ToList();
                 foreach (var item in list)
                 {
-                    var marketData = ObjFactory.Instance.CreateMarketOrderBookData();
+                    var marketData = ObjFactory.Instance.CreateMarketOrderData();
 
                     if (MarketOrderDataList.Any(x => x.Price == item.Price))
                     {

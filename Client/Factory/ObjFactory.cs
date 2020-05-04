@@ -91,13 +91,22 @@ namespace Client.Factory
             return (ServerStockService.PlaceOrderData)_objContainer.Resolve(typeof(ServerStockService.PlaceOrderData), MethodBase.GetCurrentMethod().Name);
         }
 
-        public MarketOrderData CreateMarketOrderBookData()
+        public MarketOrderData CreateMarketOrderData()
         {
             if (!_objContainer.IsRegistered(typeof(MarketOrderData), MethodBase.GetCurrentMethod().Name))
             {
                 _objContainer.RegisterInstance(typeof(MarketOrderData), MethodBase.GetCurrentMethod().Name);
             }
             return (MarketOrderData)_objContainer.Resolve(typeof(MarketOrderData), MethodBase.GetCurrentMethod().Name);
+        }
+
+        public ServerStockService.MarketOrderBookData CreateMarketOrderBookData()
+        {
+            if (!_objContainer.IsRegistered(typeof(ServerStockService.MarketOrderBookData), MethodBase.GetCurrentMethod().Name))
+            {
+                _objContainer.RegisterInstance(typeof(ServerStockService.MarketOrderBookData), MethodBase.GetCurrentMethod().Name);
+            }
+            return (ServerStockService.MarketOrderBookData)_objContainer.Resolve(typeof(ServerStockService.MarketOrderBookData), MethodBase.GetCurrentMethod().Name);
         }
 
         public ServerStockService.StockData CreateStockData()

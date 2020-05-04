@@ -73,7 +73,7 @@ namespace ClientTest.ViewModel
         [DataRow(10000)]
         public void CheckStockPriceUpdate_Test(double stockPrice)
         {
-            StockData eventData = ObjFactory.Instance.CreateStockData();
+            var eventData = ObjFactory.Instance.CreateStockData();
             eventData.StockPrice = stockPrice;
             Messenger.Default.Send(eventData, MessengerToken.BROADCASTSTOCKPRICE);
             Thread.Sleep(2000);
@@ -91,7 +91,7 @@ namespace ClientTest.ViewModel
             (int buyUserId, int sellUserID, int tradeQuantity, double tradePrice)
         {
             DispatcherHelper.Initialize();
-            TradeOrderData eventData = ObjFactory.Instance.CreateTradeOrderData();
+            var eventData = ObjFactory.Instance.CreateTradeOrderData();
             eventData.BuyUserId = buyUserId;
             eventData.SellUserId = sellUserID;
             eventData.TradeQuantity = tradeQuantity;
@@ -115,7 +115,7 @@ namespace ClientTest.ViewModel
             (int buyUserId, int sellUserID, int tradeQuantity, double tradePrice, int count)
         {
             DispatcherHelper.Initialize();
-            TradeOrderData eventData = ObjFactory.Instance.CreateTradeOrderData();
+            var eventData = ObjFactory.Instance.CreateTradeOrderData();
             eventData.BuyUserId = buyUserId;
             eventData.SellUserId = sellUserID;
             eventData.TradeQuantity = tradeQuantity;
@@ -140,5 +140,100 @@ namespace ClientTest.ViewModel
         }
 
         #endregion Check Trade Update
+
+        #region Check OrderBook Update
+
+        [TestMethod]
+        [DataRow(1, true, 100, 120)]
+        [DataRow(1, false, 100, 120)]
+        public void CheckBidOrderBookUpdate_Test
+          (int clientId, bool isBuy, int quantity, double price)
+        {
+            DispatcherHelper.Initialize();
+            var eventData = ObjFactory.Instance.CreateMarketOrderBookData();
+            eventData.BuyPendingOrders = new Client.ServerStockService.PlaceOrderData[1];
+            var mrktData = GetMarketData(clientId, isBuy, quantity, price);
+            eventData.BuyPendingOrders[0] = mrktData;
+            ViewModel.ClientId = clientId;
+            Messenger.Default.Send(eventData, MessengerToken.BROADCASTMARKETORDERBOOK);
+            Thread.Sleep(2000);
+            bool isValidOrderCount = ViewModel.MarketOrderDataList.Count == 1;
+
+            bool isValidDataAdded = (ViewModel.MarketOrderDataList[0].MrktBidQuantity == quantity &&
+               ViewModel.MarketOrderDataList[0].MyBidQuantity == quantity &&
+               ViewModel.MarketOrderDataList[0].Price == price);
+
+            Assert.IsTrue(isValidOrderCount && isValidDataAdded);
+        }
+
+        [TestMethod]
+        [DataRow(1, 2, 100, 120, 121, true)]
+        [DataRow(1, 2, 100, 120, 121, false)]
+        public void CheckAskBidOrderBookUpdate_Test
+          (int buyerId, int sellerId, int quantity, double buyerPrice,
+            double sellerPrice, bool buyerClientSame)
+        {
+            DispatcherHelper.Initialize();
+            var eventData = ObjFactory.Instance.CreateMarketOrderBookData();
+            eventData.BuyPendingOrders = new Client.ServerStockService.PlaceOrderData[1];
+            eventData.SellPendingOrders = new Client.ServerStockService.PlaceOrderData[1];
+
+            var bmrktData = ObjFactory.Instance.CreateStockServicePlaceOrderData();
+            bmrktData.ClientId = buyerId;
+            bmrktData.Quantity = quantity;
+            bmrktData.Price = buyerPrice;
+            bmrktData.IsBuy = true;
+            eventData.BuyPendingOrders[0] = bmrktData;
+
+            var smrktData = ObjFactory.Instance.CreateStockServicePlaceOrderData();
+            smrktData.ClientId = sellerId;
+            smrktData.Quantity = quantity;
+            smrktData.Price = sellerPrice;
+            smrktData.IsBuy = false;
+            eventData.SellPendingOrders[0] = smrktData;
+
+            int myBidQuantity = 0;
+            int myAskQuantity = 0;
+            if (buyerClientSame)
+            {
+                ViewModel.ClientId = buyerId;
+                myBidQuantity = quantity;
+            }
+            else
+            {
+                ViewModel.ClientId = sellerId;
+                myAskQuantity = quantity;
+            }
+
+            Messenger.Default.Send(eventData, MessengerToken.BROADCASTMARKETORDERBOOK);
+            Thread.Sleep(2000);
+            bool isValidOrderCount = ViewModel.MarketOrderDataList.Count == 2;
+
+            bool isBidValidDataAdded = (ViewModel.MarketOrderDataList[0].MrktBidQuantity == quantity &&
+               ViewModel.MarketOrderDataList[0].MyBidQuantity == myBidQuantity &&
+               ViewModel.MarketOrderDataList[0].Price == buyerPrice);
+
+            bool isAskValidDataAdded = (ViewModel.MarketOrderDataList[1].MrktAskQuantity == quantity &&
+               ViewModel.MarketOrderDataList[1].MyAskQuantity == myAskQuantity &&
+               ViewModel.MarketOrderDataList[1].Price == sellerPrice);
+
+            Assert.IsTrue(isValidOrderCount && isBidValidDataAdded && isAskValidDataAdded);
+        }
+
+        #endregion Check OrderBook Update
+
+        #region Private Methods
+
+        private PlaceOrderData GetMarketData(int clientId, bool isBuy, int quantity, double price)
+        {
+            var mrktData = ObjFactory.Instance.CreateStockServicePlaceOrderData();
+            mrktData.ClientId = clientId;
+            mrktData.Quantity = quantity;
+            mrktData.Price = price;
+            mrktData.IsBuy = isBuy;
+            return mrktData;
+        }
+
+        #endregion Private Methods
     }
 }
