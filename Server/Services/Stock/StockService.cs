@@ -39,7 +39,10 @@ namespace Server.StockServices
 
         public void PlaceOrder(PlaceOrderData data)
         {
-            ObjFactory.Instance.CreateOrder().AddOrderIntoQueue(data);
+            if (ObjFactory.Instance.CreateRegisterClients().GetClients().ContainsKey(data.ClientId))
+            {
+                ObjFactory.Instance.CreateOrder().AddOrderIntoQueue(data);
+            }
         }
 
         #endregion Public Methods

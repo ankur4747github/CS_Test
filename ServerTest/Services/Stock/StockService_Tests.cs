@@ -52,6 +52,7 @@ namespace ServerTest.Services.Stock
         [DataRow(1, 120, 30, true, true)]
         public void CheckPlaceOrder_Test(int clientId, double price, int quantity, bool isBuy, bool result)
         {
+            _stockService.RegisterClient(clientId);
             var data = ObjFactory.Instance.CreatePlaceOrderData();
             data.ClientId = clientId;
             data.Price = price;
